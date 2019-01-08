@@ -1,0 +1,5 @@
+# Classification (U)
+# Unclassified until filled in.
+[client]
+password='{ROOT_PASSWORD}'
+socket=/opt/lamp/mysql/tmp/mysql.sock
