@@ -98,7 +98,6 @@ import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -125,8 +124,6 @@ def is_slv_up(SLV, **kwargs):
 
     Arguments:
         (input) SLV -> Class instance of slave.
-        (input) **kwargs:
-            None
 
     """
 
@@ -374,8 +371,6 @@ def create_instances(args_array, **kwargs):
 
     Arguments:
         (input) args_array -> Array of command line options and values.
-        (input) **kwargs:
-            None
         (output) MASTER -> Master instance.
         (output) SLAVE -> Slave instance array.
 
@@ -402,8 +397,6 @@ def run_program(args_array, func_dict, **kwargs):
     Arguments:
         (input) args_array -> Array of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
-        (input) **kwargs:
-            None
 
     """
 
