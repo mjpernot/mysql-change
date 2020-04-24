@@ -8,6 +8,7 @@ coverage erase
 
 echo ""
 echo "Running unit test modules in conjunction with coverage"
+coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/create_instances.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/crt_slv_mst.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/fetch_slv.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/help_message.py
@@ -15,6 +16,7 @@ coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/is_slv_up.p
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/move_slave.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/move_slave_up.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/mv_slv_to_new_mst.py
+coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/run_program.py
 
 echo ""
 echo "Producing code coverage report"
