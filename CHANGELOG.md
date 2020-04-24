@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.2] - 2020-04-24
+### Changed
+- Documentation updates.
+
+
 ## [3.0.1] - 2018-12-06
 ### Changed
 - Documentation updates.
@@ -35,7 +40,7 @@ Breaking Change
 ### Changed
 - Convert program to use local libraries from ./lib directory.
 - Change single quotes to double quotes.
-- Help_Message: Replace docstring with printing the programs __doc__.
+- Help_Message: Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [2.0.0] - 2016-11-18
