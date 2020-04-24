@@ -11,4 +11,5 @@ test/unit/mysql_rep_change/fetch_slv.py
 test/unit/mysql_rep_change/help_message.py
 test/unit/mysql_rep_change/is_slv_up.py
 test/unit/mysql_rep_change/move_slave.py
+test/unit/mysql_rep_change/move_slave_up.py
 test/unit/mysql_rep_change/mv_slv_to_new_mst.py

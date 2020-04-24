@@ -13,6 +13,7 @@ coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/fetch_slv.p
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/help_message.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/is_slv_up.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/move_slave.py
+coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/move_slave_up.py
 coverage run -a --source=mysql_rep_change test/unit/mysql_rep_change/mv_slv_to_new_mst.py
 
 echo ""
