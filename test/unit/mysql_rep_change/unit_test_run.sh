@@ -6,4 +6,6 @@
 
 echo ""
 echo "Unit testing..."
+test/unit/mysql_rep_change/fetch_slv.py
 test/unit/mysql_rep_change/help_message.py
+test/unit/mysql_rep_change/is_slv_up.py
