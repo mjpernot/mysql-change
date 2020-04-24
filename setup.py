@@ -36,15 +36,17 @@ setuptools.setup(
 
     classifiers=[
         # Common Values:
-        #  2 - Pre-Alpha
-        #  3 - Alpha
-        #  4 - Beta
+        #  1 - Pre-Alpha
+        #  2 - Alpha
+        #  3 - Beta
+        #  4 - Field
         #  5 - Production/Stable
         "Development Status :: 5 - Production/Stable",
         "Operating System :: Linux",
         "Operating System :: Linux :: Centos",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
         "Topic :: Database",
         "Topic :: Database :: MySQL",
         "Topic :: Database :: MySQL :: 5.6"])
