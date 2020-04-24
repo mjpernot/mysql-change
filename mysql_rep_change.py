@@ -46,17 +46,17 @@
             the -m is a master configuration file name (minus .py extension).
 
     Notes:
-        Database configuration file format (mysql_cfg.py):
+        Database configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file for {Database Name/Server}
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
+            serv_os = "Linux"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
-            cfg_file = "DIRECTORY_PATH/mysql.cfg"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/myextra.cfg"
+            port = 3306
+            cfg_file = "DIRECTORY_PATH/mysql.cnf"
+            sid = SERVER_ID
+            extra_def_file = "DIRECTORY_PATH/config/mysql.cfg"
 
             NOTE 1:  Include the cfg_file even if running remotely as the
                 file will be used in future releases.
@@ -70,9 +70,9 @@
             configuration modules -> name is runtime dependent as it can be
                 used to connect to different databases with different names.
 
-            Defaults Extra File format (mysql.cfg):
+            Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
-            password="ROOT_PASSWORD"
+            password="PASSWORD"
             socket="DIRECTORY_PATH/mysql.sock"
 
             NOTE:  The socket information can be obtained from the my.cnf
