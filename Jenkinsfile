@@ -62,25 +62,25 @@ pipeline {
                                 "pattern": "./*.py",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-change/"
+                                "target": "pypi-proj-local/highpoint/mysql-change/"
                             },
                             {
                                 "pattern": "./*.txt",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-change/"
+                                "target": "pypi-proj-local/highpoint/mysql-change/"
                             },
                             {
                                 "pattern": "./*.md",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-change/"
+                                "target": "pypi-proj-local/highpoint/mysql-change/"
                             },
                             {
                                 "pattern": "*.TEMPLATE",
                                 "recursive": true,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-change/config/"
+                                "target": "pypi-proj-local/highpoint/mysql-change/config/"
                             }
                         ]
                     }"""
