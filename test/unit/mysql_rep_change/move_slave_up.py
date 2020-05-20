@@ -175,7 +175,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-                         (False, None))
+            (False, None))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
@@ -202,7 +202,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-                         (True, self.err_msg2))
+            (True, self.err_msg2))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
@@ -227,7 +227,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-                         (True, self.err_msg))
+            (True, self.err_msg))
 
     @mock.patch("mysql_rep_change.fetch_slv")
     def test_fetch_slv_fails(self, mock_fetch):
