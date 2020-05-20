@@ -35,6 +35,51 @@ import version
 __version__ = version.__version__
 
 
+class MasterRep(object):
+
+    """Class:  MasterRep
+
+    Description:  Class stub holder for mysql_class.MasterRep class.
+
+    Methods:
+        __init__ -> Class initialization.
+        connect -> connect method.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "Master_Server_Name"
+        self.read_only = "OFF"
+        self.server_id = 10
+        self.sql_user = "User"
+        self.sql_pass = None
+        self.machine = "Linux"
+        self.host = "HostName"
+        self.port = 3306
+        self.defaults_file = None
+
+    def connect(self):
+
+        """Method:  connect
+
+        Description:  connect method.
+
+        Arguments:
+
+        """
+
+        return True
+
+
 class SlaveRep(object):
 
     """Class:  SlaveRep
@@ -43,6 +88,7 @@ class SlaveRep(object):
 
     Methods:
         __init__ -> Class initialization.
+        connect -> connect method.
 
     """
 
@@ -65,6 +111,18 @@ class SlaveRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+
+    def connect(self):
+
+        """Method:  connect
+
+        Description:  connect method.
+
+        Arguments:
+
+        """
+
+        return True
 
 
 class UnitTest(unittest.TestCase):
@@ -92,9 +150,10 @@ class UnitTest(unittest.TestCase):
         """
 
         self.slave = SlaveRep()
+        self.master = MasterRep()
+        self.name = "Master_Server_Name"
         self.slaves = [self.slave]
         self.new_mst = "SlaveName"
-        self.master = "MasterName"
         self.result_msg = \
             "Error:  New master SlaveName is set to read-only mode."
         self.result_msg2 = \
@@ -139,10 +198,9 @@ class UnitTest(unittest.TestCase):
         self.assertEqual((master, err_flag, err_msg),
                          (None, True, self.result_msg))
 
-    @mock.patch("mysql_rep_change.mysql_class.MasterRep",
-                mock.Mock(return_value="MasterName"))
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
-    def test_found_slave(self, mock_find):
+    def test_found_slave(self, mock_find, mock_mst):
 
         """Function:  test_found_slave
 
@@ -153,12 +211,13 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_find.return_value = self.slave
+        mock_mst.return_value = self.master
 
         master, err_flag, err_msg = mysql_rep_change.crt_slv_mst(
             self.slaves, new_mst=self.new_mst)
 
-        self.assertEqual((master, err_flag, err_msg),
-                         (self.master, False, None))
+        self.assertEqual((master.name, err_flag, err_msg),
+                         (self.name, False, None))
 
 
 if __name__ == "__main__":
