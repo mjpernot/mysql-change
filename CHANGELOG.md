@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - fetch_slv:  Fixed incorrect reference to slave name variable.
 
 ### Changed
+- is_slv_up:  Changed variables to standard naming convention.
 - Documentation updates.
 
 

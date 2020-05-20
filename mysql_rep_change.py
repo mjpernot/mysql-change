@@ -115,7 +115,7 @@ def help_message():
     print(__doc__)
 
 
-def is_slv_up(SLV, **kwargs):
+def is_slv_up(slv, **kwargs):
 
     """Function:  is_slv_up
 
@@ -123,16 +123,16 @@ def is_slv_up(SLV, **kwargs):
         any errors to report.
 
     Arguments:
-        (input) SLV -> Class instance of slave.
+        (input) slv -> Class instance of slave.
 
     """
 
-    if not SLV.is_slv_running():
-        print("Error:  Slave on {0} is not running.".format(SLV.name))
+    if not slv.is_slv_running():
+        print("Error:  Slave on {0} is not running.".format(slv.name))
 
-        if SLV.is_slv_error():
-            print("IO Error:  {0}:  {1}".format(SLV.io_err, SLV.io_msg))
-            print("SQL Error:  {0}:  {1}".format(SLV.sql_err, SLV.sql_msg))
+        if slv.is_slv_error():
+            print("IO Error:  {0}:  {1}".format(slv.io_err, slv.io_msg))
+            print("SQL Error:  {0}:  {1}".format(slv.sql_err, slv.sql_msg))
 
 
 def fetch_slv(SLAVES, **kwargs):
