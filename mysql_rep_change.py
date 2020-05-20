@@ -191,7 +191,7 @@ def crt_slv_mst(slaves, **kwargs):
         (input) slaves -> Slave instance array.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
-        (output) NEW_MST -> Class instance of new master.
+        (output) new_master -> Class instance of new master.
         (output) err_flag -> True|False - if an error has occurred.
         (output) err_msg -> Error message.
 
@@ -199,7 +199,7 @@ def crt_slv_mst(slaves, **kwargs):
 
     err_flag = False
     err_msg = None
-    new_mst = None
+    new_master = None
 
     slv = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
 
@@ -212,17 +212,17 @@ def crt_slv_mst(slaves, **kwargs):
 
         # Assume slave is ready to be new master.
         else:
-            new_mst = mysql_class.MasterRep(
+            new_master = mysql_class.MasterRep(
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
                 slv.machine, slv.host, slv.port, slv.defaults_file)
-            new_mst.connect()
+            new_master.connect()
 
     else:
         err_flag = True
         err_msg = "Error: Slave(new master) %s was not found in slave array." \
                   % (kwargs.get("new_mst"))
 
-    return new_mst, err_flag, err_msg
+    return new_master, err_flag, err_msg
 
 
 def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):

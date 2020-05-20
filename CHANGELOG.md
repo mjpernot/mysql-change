@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.0.2] - 2020-04-24
 ### Fixed
+- crt_slv_mst:  Fixed naming conflict between arguments.
 - move_slave_up:  Setup connect to new master connection and to new slave master connection.
 - crt_slv_mst:  Setup connect to new master connection.
 - create_instances:  Setup connect to master connection.
