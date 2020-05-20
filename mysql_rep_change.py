@@ -371,16 +371,16 @@ def create_instances(args_array, **kwargs):
 
     """
 
-    MASTER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+    master = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.MasterRep)
-    SLAVES = []
+    slaves = []
 
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
 
-    SLAVES = mysql_libs.create_slv_array(slv_array)
+    slaves = mysql_libs.create_slv_array(slv_array)
 
-    return MASTER, SLAVES
+    return master, slaves
 
 
 def run_program(args_array, func_dict, **kwargs):
