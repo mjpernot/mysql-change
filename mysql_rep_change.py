@@ -224,7 +224,7 @@ def crt_slv_mst(slaves, **kwargs):
     return new_mst, err_flag, err_msg
 
 
-def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
+def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):
 
     """Function:  mv_slv_to_new_mst
 
@@ -236,7 +236,7 @@ def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
         (input) master -> Master class instance.
         (input) slaves -> Slave instance array.
         (input) new_master -> Class instance of new master.
-        (input) slv_mv -> Class instance of slave to be moved.
+        (input) slave_move -> Class instance of slave to be moved.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
         (output) err_flag -> True|False - if an error has occurred.
@@ -244,7 +244,8 @@ def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
 
     """
 
-    for svr in [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slv_mv]:
+    for svr in [mysql_libs.find_name(slaves, kwargs.get("new_mst")),
+                slave_move]:
 
         err_flag, err_msg = mysql_libs.sync_rep_slv(master, svr)
 
@@ -255,10 +256,11 @@ def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
     else:
         # Get latest log position.
         new_master.upd_mst_status()
-        mysql_libs.change_master_to(new_master, slv_mv)
+        mysql_libs.change_master_to(new_master, slave_move)
 
     mysql_libs.chg_slv_state(
-        [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slv_mv], "start")
+        [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slave_move],
+        "start")
 
     return err_flag, err_msg
 
