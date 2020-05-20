@@ -51,12 +51,12 @@
             user = "USER"
             passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux"
             name = "HOSTNAME"
-            port = 3306
-            cfg_file = "DIRECTORY_PATH/mysql.cnf"
             sid = SERVER_ID
-            extra_def_file = "DIRECTORY_PATH/config/mysql.cfg"
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            port = 3306
+            cfg_file = "DIRECTORY_PATH/my.cnf"
 
             NOTE 1:  Include the cfg_file even if running remotely as the
                 file will be used in future releases.
@@ -70,13 +70,26 @@
             configuration modules -> name is runtime dependent as it can be
                 used to connect to different databases with different names.
 
-            Defaults Extra File format (config/mysql.cfg.TEMPLATE):
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
             password="PASSWORD"
             socket="DIRECTORY_PATH/mysql.sock"
 
             NOTE:  The socket information can be obtained from the my.cnf
                 file under ~/mysql directory.
+
+        Slave configuration file format (config/slave.txt.TEMPLATE)
+            # Slave configuration
+            user = USER
+            passwd = PASSWORD
+            host = IP_ADDRESS
+            name = HOSTNAME
+            sid = SERVER_ID
+            cfg_file = None
+            port = 3306
+            serv_os = Linux
+
+            Note:  Create a Slave configration section for each slave.
 
     Example:
         mysql_rep_change.py -c master -d config -s slaves.txt -M
