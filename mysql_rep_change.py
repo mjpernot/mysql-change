@@ -248,7 +248,7 @@ def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
     return err_flag, err_msg
 
 
-def move_slave(MASTER, SLAVES, **kwargs):
+def move_slave(master, slaves, **kwargs):
 
     """Function:  move_slave
 
@@ -258,8 +258,8 @@ def move_slave(MASTER, SLAVES, **kwargs):
         drop the rep connection between the old master and new master.
 
     Arguments:
-        (input) MASTER -> Master class instance.
-        (input) SLAVES -> Slave instance array.
+        (input) master -> Master class instance.
+        (input) slaves -> Slave instance array.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
             slv_mv -> Name of slave to be moved to new master.
@@ -269,34 +269,34 @@ def move_slave(MASTER, SLAVES, **kwargs):
 
     """
 
-    SLV_MV, err_flag, err_msg = fetch_slv(SLAVES, **kwargs)
+    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
 
     if err_flag:
         return err_flag, err_msg
 
-    NEW_MST, err_flag, err_msg = crt_slv_mst(SLAVES, **kwargs)
+    new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
 
     if err_flag:
         return err_flag, err_msg
 
-    err_flag, err_msg = mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV,
-                                          **kwargs)
+    err_flag, err_msg = mv_slv_to_new_mst(
+        master, slaves, new_master, slave_move, **kwargs)
 
     if err_flag:
-        cmds_gen.disconnect(NEW_MST)
+        cmds_gen.disconnect(new_master)
         return err_flag, err_msg
 
-    is_slv_up(SLV_MV)
+    is_slv_up(slave_move)
 
     if "-R" in kwargs.get("args"):
-        SLV_MST = mysql_libs.find_name(SLAVES, kwargs.get("new_mst"))
-        mysql_libs.chg_slv_state([SLV_MST], "stop")
-        mysql_libs.reset_slave(SLV_MST)
+        slv_mst = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
+        mysql_libs.chg_slv_state([slv_mst], "stop")
+        mysql_libs.reset_slave(slv_mst)
 
     else:
-        is_slv_up(mysql_libs.find_name(SLAVES, kwargs.get("new_mst")))
+        is_slv_up(mysql_libs.find_name(slaves, kwargs.get("new_mst")))
 
-    cmds_gen.disconnect(NEW_MST)
+    cmds_gen.disconnect(new_master)
 
     return err_flag, err_msg
 
