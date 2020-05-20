@@ -37,7 +37,7 @@ __version__ = version.__version__
 
 class MasterRep(object):
 
-    """Class:  SlaveRep
+    """Class:  MasterRep
 
     Description:  Class stub holder for mysql_class.MasterRep class.
 
