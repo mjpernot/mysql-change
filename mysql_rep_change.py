@@ -165,7 +165,7 @@ def fetch_slv(slaves, **kwargs):
     return slv, err_flag, err_msg
 
 
-def crt_slv_mst(SLAVES, **kwargs):
+def crt_slv_mst(slaves, **kwargs):
 
     """Function:  crt_slv_mst
 
@@ -173,7 +173,7 @@ def crt_slv_mst(SLAVES, **kwargs):
         slave array.  Does ensure the slave is not in read-only mode.
 
     Arguments:
-        (input) SLAVE -> Slave instance array.
+        (input) slaves -> Slave instance array.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
         (output) NEW_MST -> Class instance of new master.
@@ -184,30 +184,29 @@ def crt_slv_mst(SLAVES, **kwargs):
 
     err_flag = False
     err_msg = None
-    NEW_MST = None
+    new_mst = None
 
-    SLV = mysql_libs.find_name(SLAVES, kwargs.get("new_mst"))
+    slv = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
 
-    if SLV:
+    if slv:
 
-        if gen_libs.is_true(SLV.read_only):
+        if gen_libs.is_true(slv.read_only):
             err_flag = True
             err_msg = "Error:  New master %s is set to read-only mode." \
                       % (kwargs.get("new_mst"))
 
         # Assume slave is ready to be new master.
         else:
-            NEW_MST = mysql_class.MasterRep(SLV.name, SLV.server_id,
-                                            SLV.sql_user, SLV.sql_pass,
-                                            SLV.machine, SLV.host, SLV.port,
-                                            SLV.defaults_file)
+            new_mst = mysql_class.MasterRep(
+                slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
+                slv.machine, slv.host, slv.port, slv.defaults_file)
 
     else:
         err_flag = True
         err_msg = "Error: Slave(new master) %s was not found in slave array." \
                   % (kwargs.get("new_mst"))
 
-    return NEW_MST, err_flag, err_msg
+    return new_mst, err_flag, err_msg
 
 
 def mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV, **kwargs):
