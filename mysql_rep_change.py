@@ -33,7 +33,9 @@
             between the current master and new master.
         -S -> Take a slave that is under a slave/master and move it to
             under the master that is hosting the slave/master
-            (Topology:  Master -> Slave/Master -> Slave).
+            (Current Topology:  Master -> Slave/Master -> Slave)
+            (New Topology:  Master -> Slave1
+                            Master -> Slave2)
         -m name => Name of the new master or new Master config file.
         -n name => Name of a slave to be moved to the new master.
         -v => Display version of this program.
