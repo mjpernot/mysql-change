@@ -138,7 +138,7 @@ class UnitTest(unittest.TestCase):
         self.master = MasterRep()
         self.slave = SlaveRep()
         self.slaves = [self.slave]
-        self.NEW_MST = MasterRep()
+        self.new_master = MasterRep()
         self.slv_mv = SlaveRep()
         self.new_mst = "SlaveName"
         self.err_msg = "Error: Sync failed"
@@ -161,7 +161,7 @@ class UnitTest(unittest.TestCase):
         mock_sync.return_value = (True, self.err_msg)
 
         self.assertEqual(mysql_rep_change.mv_slv_to_new_mst(
-            self.master, self.slaves, self.NEW_MST, self.slv_mv,
+            self.master, self.slaves, self.new_master, self.slv_mv,
             new_mst=self.new_mst), (True, self.err_msg))
 
     @mock.patch("mysql_rep_change.mysql_libs.chg_slv_state",
@@ -184,7 +184,7 @@ class UnitTest(unittest.TestCase):
         mock_find.return_value = self.slave
 
         self.assertEqual(mysql_rep_change.mv_slv_to_new_mst(
-            self.master, self.slaves, self.NEW_MST, self.slv_mv,
+            self.master, self.slaves, self.new_master, self.slv_mv,
             new_mst=self.new_mst), (False, None))
 
 
