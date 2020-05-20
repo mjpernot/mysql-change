@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - fetch_slv:  Fixed incorrect reference to slave name variable.
 
 ### Changed
+- run_program:  Changed variables to standard naming convention.
 - create_instances:  Changed variables to standard naming convention.
 - move_slave_up:  Changed variables to standard naming convention.
 - move_slave:  Changed variables to standard naming convention.

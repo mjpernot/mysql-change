@@ -395,26 +395,25 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
-    MASTER, SLAVES = create_instances(args_array)
+    master, slaves = create_instances(args_array)
 
-    if MASTER and SLAVES:
+    if master and slaves:
 
         for opt in args_array:
 
             if opt in func_dict:
 
-                err_flag, err_msg = func_dict[opt](MASTER, SLAVES,
-                                                   new_mst=args_array["-m"],
-                                                   slv_mv=args_array["-n"],
-                                                   args=args_array)
+                err_flag, err_msg = func_dict[opt](
+                    master, slaves, new_mst=args_array["-m"],
+                    slv_mv=args_array["-n"], args=args_array)
 
-                cmds_gen.disconnect(MASTER, SLAVES)
+                cmds_gen.disconnect(master, slaves)
 
                 if err_flag:
                     sys.exit(err_msg)
 
     else:
-        cmds_gen.disconnect(MASTER, SLAVES)
+        cmds_gen.disconnect(master, slaves)
         sys.exit("Error:  Master and/or Slaves instances not created.")
 
 
