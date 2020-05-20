@@ -301,7 +301,7 @@ def move_slave(master, slaves, **kwargs):
     return err_flag, err_msg
 
 
-def move_slave_up(MASTER, SLAVES, **kwargs):
+def move_slave_up(master, slaves, **kwargs):
 
     """Function:  move_slave_up
 
@@ -311,8 +311,8 @@ def move_slave_up(MASTER, SLAVES, **kwargs):
         slave/master to the new master.
 
     Arguments:
-        (input) MASTER -> Master class instance.
-        (input) SLAVES -> Slave instance array.
+        (input) master -> Master class instance.
+        (input) slaves -> Slave instance array.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
             slv_mv -> Name of slave to be moved to new master.
@@ -322,40 +322,37 @@ def move_slave_up(MASTER, SLAVES, **kwargs):
 
     """
 
-    SLV_MV, err_flag, err_msg = fetch_slv(SLAVES, **kwargs)
+    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
 
     if err_flag:
         return err_flag, err_msg
 
-    NEW_MST = mysql_libs.create_instance(kwargs.get("new_mst"),
-                                         kwargs.get("args")["-d"],
-                                         mysql_class.MasterRep)
+    new_master = mysql_libs.create_instance(
+        kwargs.get("new_mst"), kwargs.get("args")["-d"], mysql_class.MasterRep)
 
-    SLV_MST = mysql_class.SlaveRep(MASTER.name, MASTER.server_id,
-                                   MASTER.sql_user, MASTER.sql_pass,
-                                   MASTER.machine, MASTER.host, MASTER.port,
-                                   MASTER.defaults_file)
+    slv_master = mysql_class.SlaveRep(
+        master.name, master.server_id, master.sql_user, master.sql_pass,
+        master.machine, master.host, master.port, master.defaults_file)
 
-    err_flag, err_msg = mysql_libs.sync_rep_slv(NEW_MST, SLV_MST)
+    err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
 
     if err_flag:
-        cmds_gen.disconnect(NEW_MST, SLV_MST)
+        cmds_gen.disconnect(new_master, slv_master)
         return err_flag, err_msg
 
     err_flag, err_msg = \
-        mysql_libs.sync_rep_slv(MASTER,
-                                mysql_libs.find_name(SLAVES,
-                                                     kwargs.get("slv_mv")))
+        mysql_libs.sync_rep_slv(
+            master, mysql_libs.find_name(slaves, kwargs.get("slv_mv")))
 
     if err_flag:
-        cmds_gen.disconnect(NEW_MST, SLV_MST)
+        cmds_gen.disconnect(new_master, slv_master)
         return err_flag, err_msg
 
-    mysql_libs.change_master_to(NEW_MST, SLV_MV)
-    cmds_gen.disconnect(NEW_MST, SLV_MST)
-    mysql_libs.chg_slv_state([SLV_MV, SLV_MST], "start")
-    is_slv_up(SLV_MV)
-    is_slv_up(SLV_MST)
+    mysql_libs.change_master_to(new_master, slave_move)
+    cmds_gen.disconnect(new_master, slv_master)
+    mysql_libs.chg_slv_state([slave_move, slv_master], "start")
+    is_slv_up(slave_move)
+    is_slv_up(slv_master)
 
     return err_flag, err_msg
 
