@@ -76,7 +76,7 @@ class UnitTest(unittest.TestCase):
         test_no_master -> Test with no master instance.
         test_with_option_fails -> Test with option failing.
         test_with_multiple_options -> Test with multiple options selected.
-        test_with_option -> Test with option selected. 
+        test_with_option -> Test with option selected.
         test_no_option -> Test with no option selected.
 
     """
