@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.0.2] - 2020-04-24
+### Fixed
+- fetch_slv:  Fixed incorrect reference to slave name variable.
+
 ### Changed
 - Documentation updates.
 

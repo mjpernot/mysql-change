@@ -160,7 +160,7 @@ def fetch_slv(SLAVES, **kwargs):
     if not SLV:
         err_flag = True
         err_msg = "Error:  Slave %s was not found in slave array." \
-                  % (slv)
+                  % (kwargs.get("slv_mv"))
 
     return SLV, err_flag, err_msg
 
