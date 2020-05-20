@@ -35,6 +35,51 @@ import version
 __version__ = version.__version__
 
 
+class MasterRep(object):
+
+    """Class:  SlaveRep
+
+    Description:  Class stub holder for mysql_class.MasterRep class.
+
+    Methods:
+        __init__ -> Class initialization.
+        connect -> connect method.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "Server_Name"
+        self.read_only = "OFF"
+        self.server_id = 10
+        self.sql_user = "User"
+        self.sql_pass = None
+        self.machine = "Linux"
+        self.host = "HostName"
+        self.port = 3306
+        self.defaults_file = None
+
+    def connect(self):
+
+        """Method:  connect
+
+        Description:  connect method.
+
+        Arguments:
+
+        """
+
+        return True
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -57,15 +102,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.master = MasterRep()
         self.args_array = {"-c": "mysql_cfg", "-d": "config", "-s": "slave"}
+        self.name = "Server_Name"
 
     @mock.patch("mysql_rep_change.mysql_libs.create_slv_array",
                 mock.Mock(return_value="SlaveArray"))
     @mock.patch("mysql_rep_change.cmds_gen.create_cfg_array",
                 mock.Mock(return_value=[]))
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance",
-                mock.Mock(return_value="Master"))
-    def test_create_instances(self):
+    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
+    def test_create_instances(self, mock_inst):
 
         """Function:  test_create_instances
 
@@ -75,8 +121,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_rep_change.create_instances(
-            self.args_array), ("Master", "SlaveArray"))
+        mock_inst.return_value = self.master
+
+        master, slaves = mysql_rep_change.create_instances(self.args_array)
+
+        self.assertEqual((master.name, slaves), (self.name, "SlaveArray"))
 
 
 if __name__ == "__main__":
