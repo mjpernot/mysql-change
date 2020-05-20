@@ -169,10 +169,10 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_rep_change.move_slave(
             self.master, self.slaves, args=self.args2, new_mst=self.new_mst),
-                         (False, None))
+            (False, None))
 
     @mock.patch("mysql_rep_change.mysql_libs.reset_slave",
-        mock.Mock(return_value=True))
+                mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.chg_slv_state",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
@@ -198,7 +198,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_rep_change.move_slave(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-                         (False, None))
+            (False, None))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
