@@ -65,7 +65,7 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
 ```
 
 # Configuration:
-  * Replace **{Python_Project}** with the baseline path of the python program.
+  * Replace **PYTHON_PROJECT** with the baseline path of the python program.
 
 Create MySQL configuration file.
 
@@ -76,11 +76,16 @@ cp mysql_cfg.py.TEMPLATE mysql_cfg.py
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
-    - passwd = "ROOT_PASSWORD"
+    - user = "USER"
+    - passwd = "PASSWORD"
     - host = "SERVER_IP"
     - name = "HOST_NAME"
     - sid = SERVER_ID
-    - extra_def_file = "{Python_Project}/config/mysql.cfg"
+    - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+    - cfg_file = "DIRECTORY_PATH/my.cnf"
+  * Change these entries only if required:
+    - serv_os = "Linux"
+    - port = 3306
 
 ```
 vim mysql_cfg.py
@@ -95,8 +100,8 @@ cp mysql.cfg.TEMPLATE mysql.cfg
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
-    - password="ROOT_PASSWORD"
-    - socket={BASE_DIR}/mysql/tmp/mysql.sock
+    - password="PASSWORD"
+    - socket="DIRECTORY_PATH/mysql.sock"
 
 ```
 vim mysql.cfg
@@ -111,11 +116,16 @@ cp slave.txt.TEMPLATE slave.txt
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL slave setup:
-    * NOTE:  Create a new set of entries for each slave in the MySQL replica set.
-    - passwd = ROOT_PASSWORD
-    - host = HOST_IP
+    - user = USER
+    - passwd = PASSWORD
+    - host = IP_ADDRESS
     - name = HOSTNAME
     - sid = SERVER_ID
+  * Change these entries only if required:
+    - cfg_file = None
+    - serv_os = Linux
+    - port = 3306
+  * NOTE:  Create a new set of entries for each slave in the MySQL replica set.
 
 ```
 vim slave.txt
