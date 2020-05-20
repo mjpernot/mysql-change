@@ -390,6 +390,7 @@ def create_instances(args_array, **kwargs):
 
     master = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.MasterRep)
+    master.connect()
     slaves = []
 
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],

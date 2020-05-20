@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.0.2] - 2020-04-24
 ### Fixed
+- create_instances:  Setup connect to master connection.
 - mv_slv_to_new_mst:  Fixed naming conflict between arguments.
 - main:  Fixed handling command line arguments from SonarQube scan finding.
 - fetch_slv:  Fixed incorrect reference to slave name variable.
