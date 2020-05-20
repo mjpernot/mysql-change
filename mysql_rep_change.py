@@ -215,6 +215,7 @@ def crt_slv_mst(slaves, **kwargs):
             new_mst = mysql_class.MasterRep(
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
                 slv.machine, slv.host, slv.port, slv.defaults_file)
+            new_mst.connect()
 
     else:
         err_flag = True
