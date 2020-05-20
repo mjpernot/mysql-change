@@ -443,6 +443,7 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     func_dict = {"-M": move_slave, "-R": move_slave, "-S": move_slave_up}
     opt_con_req_list = {"-M": ["-m", "-n"], "-R": ["-m", "-n"],
@@ -452,7 +453,7 @@ def main():
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list)
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message):
         if not arg_parser.arg_require(args_array, opt_req_list) \
