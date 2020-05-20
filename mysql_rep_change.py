@@ -135,14 +135,14 @@ def is_slv_up(slv, **kwargs):
             print("SQL Error:  {0}:  {1}".format(slv.sql_err, slv.sql_msg))
 
 
-def fetch_slv(SLAVES, **kwargs):
+def fetch_slv(slaves, **kwargs):
 
     """Function:  fetch_slv
 
     Description:  Locates a slave in the slave array.
 
     Arguments:
-        (input) SLAVE -> Slave instance array.
+        (input) slaves -> Slave instance array.
         (input) **kwargs:
             slv_mv -> Name of slave to be moved to new master.
         (output) SLV -> Class instance of slave.
@@ -153,16 +153,16 @@ def fetch_slv(SLAVES, **kwargs):
 
     err_flag = False
     err_msg = None
-    SLV = None
+    slv = None
 
-    SLV = mysql_libs.find_name(SLAVES, kwargs.get("slv_mv"))
+    slv = mysql_libs.find_name(slaves, kwargs.get("slv_mv"))
 
-    if not SLV:
+    if not slv:
         err_flag = True
         err_msg = "Error:  Slave %s was not found in slave array." \
                   % (kwargs.get("slv_mv"))
 
-    return SLV, err_flag, err_msg
+    return slv, err_flag, err_msg
 
 
 def crt_slv_mst(SLAVES, **kwargs):
