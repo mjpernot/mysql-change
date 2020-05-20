@@ -209,7 +209,7 @@ def crt_slv_mst(slaves, **kwargs):
     return new_mst, err_flag, err_msg
 
 
-def mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV, **kwargs):
+def mv_slv_to_new_mst(master, slaves, new_master, slv_mv, **kwargs):
 
     """Function:  mv_slv_to_new_mst
 
@@ -218,10 +218,10 @@ def mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV, **kwargs):
         Change Master To command.
 
     Arguments:
-        (input) MASTER -> Master class instance.
-        (input) SLAVES -> Slave instance array.
-        (input) NEW_MST -> Class instance of new master.
-        (input) SLV_MV -> Class instance of slave to be moved.
+        (input) master -> Master class instance.
+        (input) slaves -> Slave instance array.
+        (input) new_master -> Class instance of new master.
+        (input) slv_mv -> Class instance of slave to be moved.
         (input) **kwargs:
             new_mst -> Name of slave to be the new master.
         (output) err_flag -> True|False - if an error has occurred.
@@ -229,9 +229,9 @@ def mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV, **kwargs):
 
     """
 
-    for SVR in [mysql_libs.find_name(SLAVES, kwargs.get("new_mst")), SLV_MV]:
+    for svr in [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slv_mv]:
 
-        err_flag, err_msg = mysql_libs.sync_rep_slv(MASTER, SVR)
+        err_flag, err_msg = mysql_libs.sync_rep_slv(master, svr)
 
         if err_flag:
             break
@@ -239,12 +239,11 @@ def mv_slv_to_new_mst(MASTER, SLAVES, NEW_MST, SLV_MV, **kwargs):
     # If the loop completes, then "Change Master To" can be ran.
     else:
         # Get latest log position.
-        NEW_MST.upd_mst_status()
-        mysql_libs.change_master_to(NEW_MST, SLV_MV)
+        new_master.upd_mst_status()
+        mysql_libs.change_master_to(new_master, slv_mv)
 
-    mysql_libs.chg_slv_state([mysql_libs.find_name(SLAVES,
-                                                   kwargs.get("new_mst")),
-                              SLV_MV], "start")
+    mysql_libs.chg_slv_state(
+        [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slv_mv], "start")
 
     return err_flag, err_msg
 
