@@ -85,8 +85,9 @@ class UnitTest(unittest.TestCase):
         self.slave = SlaveRep()
         self.slaves = [self.slave]
         self.slv_mv = "SlaveName"
+        self.msg = "Error:  Slave SlaveName was not found in slave array."
 
-    @unittest.skip("Bug: slv is not initialized anywhere in function")
+    #@unittest.skip("Bug: slv is not initialized anywhere in function")
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
     def test_no_found_slave(self, mock_find):
 
@@ -103,7 +104,7 @@ class UnitTest(unittest.TestCase):
         slave, err_flag, err_msg = mysql_rep_change.fetch_slv(
             self.slaves, slv_mv=self.slv_mv)
 
-        self.assertEqual((err_flag, err_msg), (False, None))
+        self.assertEqual((err_flag, err_msg), (True, self.msg))
 
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
     def test_found_slave(self, mock_find):
