@@ -20,6 +20,7 @@
             {-M -m master_name -n slave_name } |
             {-R -m master_name -n slave_name } |
             {-S -m new_master_cfg -n slave_name}
+            [-y flavor_id]
             [-v | -h]
 
     Arguments:
@@ -41,6 +42,7 @@
                             Master -> Slave2)
         -m name => Name of the new master or new Master config file.
         -n name => Name of a slave to be moved to the new master.
+        -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
 

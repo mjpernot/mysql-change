@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.0.2] - 2020-04-24
+### Added
+- Added ProgramLock class to prevent multiple runs at the same time.
+
 ### Fixed
 - move_slave_up:  Fixed disconnect from new master and slave/master.
 - fetch_slv:  Fixed problem with mutable default arguments issue.
