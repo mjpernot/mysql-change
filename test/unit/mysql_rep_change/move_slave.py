@@ -144,8 +144,8 @@ class UnitTest(unittest.TestCase):
         self.err_msg = "Error: Fetch Failed"
         self.err_msg2 = "Error: Create Slave Failed"
         self.err_msg3 = "Error: Move of Slave to Master Failed"
-        self.args = ["-R"]
-        self.args2 = []
+        self.args = {"-R": True}
+        self.args2 = {}
         self.new_mst = "NewMaster"
 
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
@@ -219,8 +219,8 @@ class UnitTest(unittest.TestCase):
 
         mock_move.return_value = (True, self.err_msg3)
 
-        self.assertEqual(mysql_rep_change.move_slave(self.master, self.slaves),
-                         (True, self.err_msg3))
+        self.assertEqual(mysql_rep_change.move_slave(
+            self.master, self.slaves, args=self.args2), (True, self.err_msg3))
 
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
@@ -237,8 +237,8 @@ class UnitTest(unittest.TestCase):
 
         mock_crt.return_value = (None, True, self.err_msg2)
 
-        self.assertEqual(mysql_rep_change.move_slave(self.master, self.slaves),
-                         (True, self.err_msg2))
+        self.assertEqual(mysql_rep_change.move_slave(
+            self.master, self.slaves, args=self.args2), (True, self.err_msg2))
 
     @mock.patch("mysql_rep_change.fetch_slv")
     def test_fetch_slv_fails(self, mock_fetch):
@@ -253,8 +253,8 @@ class UnitTest(unittest.TestCase):
 
         mock_fetch.return_value = (None, True, self.err_msg)
 
-        self.assertEqual(mysql_rep_change.move_slave(self.master, self.slaves),
-                         (True, self.err_msg))
+        self.assertEqual(mysql_rep_change.move_slave(
+            self.master, self.slaves, args=self.args2), (True, self.err_msg))
 
 
 if __name__ == "__main__":
