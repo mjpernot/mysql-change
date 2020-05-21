@@ -269,7 +269,7 @@ class UnitTest(unittest.TestCase):
         mock_fetch.return_value = (None, True, self.err_msg)
 
         self.assertEqual(mysql_rep_change.move_slave_up(
-            self.master, self.slaves), (True, self.err_msg))
+            self.master, self.slaves, args=self.args), (True, self.err_msg))
 
 
 if __name__ == "__main__":
