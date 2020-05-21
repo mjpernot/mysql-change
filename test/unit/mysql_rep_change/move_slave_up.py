@@ -44,6 +44,7 @@ class MasterRep(object):
     Methods:
         __init__ -> Class initialization.
         upd_mst_status -> upd_mst_status method.
+        connect -> connect method.
 
     """
 
@@ -79,6 +80,18 @@ class MasterRep(object):
 
         return True
 
+    def connect(self):
+
+        """Method:  connect
+
+        Description:  connect method.
+
+        Arguments:
+
+        """
+
+        return True
+
 
 class SlaveRep(object):
 
@@ -88,6 +101,7 @@ class SlaveRep(object):
 
     Methods:
         __init__ -> Class initialization.
+        connect -> connect method.
 
     """
 
@@ -110,6 +124,18 @@ class SlaveRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+
+    def connect(self):
+
+        """Method:  connect
+
+        Description:  connect method.
+
+        Arguments:
+
+        """
+
+        return True
 
 
 class UnitTest(unittest.TestCase):
@@ -152,16 +178,14 @@ class UnitTest(unittest.TestCase):
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.mysql_class.SlaveRep",
-                mock.Mock(return_value="SlaveMaster"))
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance",
-                mock.Mock(return_value="NewMaster"))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
                 mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
+    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_slave_moved(self, mock_sync):
+    def test_slave_moved(self, mock_sync, mock_mst, mock_slv):
 
         """Function:  test_slave_moved
 
@@ -172,6 +196,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.side_effect = [(False, None), (False, None)]
+        mock_mst.return_value = self.master
+        mock_slv.return_value = self.slave
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
@@ -179,16 +205,14 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.mysql_class.SlaveRep",
-                mock.Mock(return_value="SlaveMaster"))
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance",
-                mock.Mock(return_value="NewMaster"))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
                 mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
+    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_find_slave_fails(self, mock_sync):
+    def test_find_slave_fails(self, mock_sync, mock_mst, mock_slv):
 
         """Function:  test_find_slave_fails
 
@@ -199,6 +223,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.side_effect = [(False, None), (True, self.err_msg2)]
+        mock_mst.return_value = self.master
+        mock_slv.return_value = self.slave
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
@@ -206,14 +232,12 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.mysql_class.SlaveRep",
-                mock.Mock(return_value="SlaveMaster"))
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance",
-                mock.Mock(return_value="NewMaster"))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
+    @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
+    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_sync_slave_fails(self, mock_sync):
+    def test_sync_slave_fails(self, mock_sync, mock_mst, mock_slv):
 
         """Function:  test_sync_slave_fails
 
@@ -224,6 +248,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.return_value = (True, self.err_msg)
+        mock_mst.return_value = self.master
+        mock_slv.return_value = self.slave
 
         self.assertEqual(mysql_rep_change.move_slave_up(
             self.master, self.slaves, args=self.args, new_mst=self.new_mst),
