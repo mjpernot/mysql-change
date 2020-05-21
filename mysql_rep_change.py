@@ -16,15 +16,18 @@
         files.  This must be done outside the scope of this program.
 
     Usage:
-        mysql_rep_change.py -d path -c file -s [path/]file [-M | -R |
-            -C | -S] [-m {name | file} -n name] [-v | -h]
+        mysql_rep_change.py -c cfg_file -d path -s [path/]slave.txt
+            {-M -m master_name -n slave_name } |
+            {-R -m master_name -n slave_name } |
+            {-S -m new_master_cfg -n slave_name}
+            [-v | -h]
 
     Arguments:
-        -c file => Current Master config file.  Is loaded as a python, do not
-            include the .py extension with the name.  Required arg.
-        -s file => Slave config file.  Will be a text file.  Include the
-            file extension with the name.  Can include the path or use
-            the -d option path.  Required arg.
+        -c cfg_file => Current Master config file.  Is loaded as a python, do
+            not include the .py extension with the name.  Required arg.
+        -s [path/]slave_file => Slave config file.  Will be a text file.
+            Include the file extension with the name.  Can include the path or
+            use the -d option path.  Required arg.
         -d dir path => Directory path to the config files. Required arg.
         -M -> Move slave in a slave array to under another slave in the
             same slave array.
@@ -43,9 +46,10 @@
 
         NOTE 1:  -v or -h overrides the other options.
         NOTE 2:  -M, -R, and -S are XOR arguments.
-        NOTE 3:  The name for -m option is the server_name entry from the slave
-            configuration file for the -M and -R options.  For the -S option
-            the -m is a master configuration file name (minus .py extension).
+        NOTE 3:  -M and -R options:  The name for -m option is the server_name
+            entry from the slave configuration file.
+        NOTE 4:  -S option:  The -m is a master configuration file name
+            (minus .py extension).
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
@@ -62,7 +66,6 @@
 
             NOTE 1:  Include the cfg_file even if running remotely as the
                 file will be used in future releases.
-
             NOTE 2:  In MySQL 5.6 - it now gives warning if password is
                 passed on the command line.  To suppress this warning, will
                 require the use of the --defaults-extra-file option
@@ -91,7 +94,7 @@
             port = 3306
             serv_os = Linux
 
-            Note:  Create a Slave configration section for each slave.
+            NOTE:  Create a Slave configration section for each slave.
 
     Example:
         mysql_rep_change.py -c master -d config -s slaves.txt -M
