@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.0.2] - 2020-04-24
 ### Fixed
+- create_instances:  Fixed problem with mutable default arguments issue.
 - run_program:  Fixed problem with mutable default arguments issue.
 - crt_slv_mst:  Fixed naming conflict between arguments.
 - move_slave_up:  Setup connect to new master connection and to new slave master connection.

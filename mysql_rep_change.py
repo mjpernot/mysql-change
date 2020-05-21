@@ -391,6 +391,7 @@ def create_instances(args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     master = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.MasterRep)
     master.connect()
