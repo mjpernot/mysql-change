@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.0.2] - 2020-04-24
 ### Fixed
+- move_slave:  Fixed problem with mutable default arguments issue.
 - move_slave_up:  Fixed problem with mutable default arguments issue.
 - create_instances:  Fixed problem with mutable default arguments issue.
 - run_program:  Fixed problem with mutable default arguments issue.

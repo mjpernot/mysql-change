@@ -287,6 +287,7 @@ def move_slave(master, slaves, **kwargs):
 
     """
 
+    args_array = dict(kwargs.get("args"))
     slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
 
     if err_flag:
@@ -306,7 +307,7 @@ def move_slave(master, slaves, **kwargs):
 
     is_slv_up(slave_move)
 
-    if "-R" in kwargs.get("args"):
+    if "-R" in args_array:
         slv_mst = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
         mysql_libs.chg_slv_state([slv_mst], "stop")
         mysql_libs.reset_slave(slv_mst)
