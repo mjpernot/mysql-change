@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.0.2] - 2020-04-24
 ### Fixed
+- fetch_slv:  Fixed problem with mutable default arguments issue.
 - crt_slv_mst:  Fixed problem with mutable default arguments issue.
 - mv_slv_to_new_mst:  Fixed problem with mutable default arguments issue.
 - move_slave:  Fixed problem with mutable default arguments issue.

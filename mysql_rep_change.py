@@ -166,10 +166,10 @@ def fetch_slv(slaves, **kwargs):
 
     """
 
+    slaves = list(slaves)
     err_flag = False
     err_msg = None
     slv = None
-
     slv = mysql_libs.find_name(slaves, kwargs.get("slv_mv"))
 
     if not slv:
