@@ -114,6 +114,7 @@ import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.cmds_gen as cmds_gen
 import lib.machine as machine
+import lib.gen_class as gen_class
 import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class
 import version
@@ -476,7 +477,7 @@ def main():
     opt_con_req_list = {"-M": ["-m", "-n"], "-R": ["-m", "-n"],
                         "-S": ["-m", "-n"]}
     opt_req_list = ["-c", "-d", "-s"]
-    opt_val_list = ["-c", "-d", "-m", "-n", "-s"]
+    opt_val_list = ["-c", "-d", "-m", "-n", "-s", "-y"]
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
 
     # Process argument list from command line.
@@ -487,7 +488,16 @@ def main():
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
        and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
-        run_program(args_array, func_dict)
+
+        try:
+            proglock = gen_class.ProgramLock(cmdline.argv,
+                                             args_array.get("-y", ""))
+            run_program(args_array, func_dict)
+            del proglock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  lock in place for mysql_rep_change with id of: %s"
+                  % (args_array.get("-y", "")))
 
 
 if __name__ == "__main__":
