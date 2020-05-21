@@ -414,6 +414,8 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
+    args_array = dict(args_array)
+    func_dict = dict(func_dict)
     master, slaves = create_instances(args_array)
 
     if master and slaves:
