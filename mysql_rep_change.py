@@ -245,6 +245,8 @@ def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):
 
     """
 
+    slaves = list(slaves)
+
     for svr in [mysql_libs.find_name(slaves, kwargs.get("new_mst")),
                 slave_move]:
 
