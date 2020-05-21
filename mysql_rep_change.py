@@ -340,13 +340,14 @@ def move_slave_up(master, slaves, **kwargs):
 
     """
 
+    args_array = dict(kwargs.get("args"))
     slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
 
     if err_flag:
         return err_flag, err_msg
 
     new_master = mysql_libs.create_instance(
-        kwargs.get("new_mst"), kwargs.get("args")["-d"], mysql_class.MasterRep)
+        kwargs.get("new_mst"), args_array["-d"], mysql_class.MasterRep)
     new_master.connect()
 
     slv_master = mysql_class.SlaveRep(
