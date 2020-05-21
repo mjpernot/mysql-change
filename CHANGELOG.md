@@ -26,7 +26,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - fetch_slv:  Fixed incorrect reference to slave name variable.
 
 ### Changed
-- main:  Replaced "for" and "if" statements with an intersect loop to call functions.
+- run_program:  Replaced "for" and "if" statements with an intersect loop to call functions.
 - main:  Added ProgramLock class to implement program locking.
 - config/slave.txt.TEMPLATE:  Changed format of file.
 - main:  Refactored the "if" statements to streamline the checks.
