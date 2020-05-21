@@ -342,6 +342,7 @@ def move_slave_up(master, slaves, **kwargs):
     """
 
     args_array = dict(kwargs.get("args"))
+    slaves = list(slaves)
     slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
 
     if err_flag:
