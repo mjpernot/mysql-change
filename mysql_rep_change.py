@@ -375,10 +375,10 @@ def move_slave_up(master, slaves, **kwargs):
         return err_flag, err_msg
 
     mysql_libs.change_master_to(new_master, slave_move)
-    cmds_gen.disconnect(new_master, slv_master)
     mysql_libs.chg_slv_state([slave_move, slv_master], "start")
     is_slv_up(slave_move)
     is_slv_up(slv_master)
+    cmds_gen.disconnect(new_master, slv_master)
 
     return err_flag, err_msg
 
