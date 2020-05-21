@@ -197,10 +197,10 @@ def crt_slv_mst(slaves, **kwargs):
 
     """
 
+    slaves = list(slaves)
     err_flag = False
     err_msg = None
     new_master = None
-
     slv = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
 
     if slv:
