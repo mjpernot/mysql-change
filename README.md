@@ -32,6 +32,7 @@
     - lib/arg_parser
     - lib/gen_libs
     - lib/machine
+    - lib/gen_class
     - mysql_lib/mysql_libs
     - mysql_lib/mysql_class
 
