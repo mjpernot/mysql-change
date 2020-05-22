@@ -82,8 +82,12 @@
             password="PASSWORD"
             socket="DIRECTORY_PATH/mysql.sock"
 
-            NOTE:  The socket information can be obtained from the my.cnf
-                file under ~/mysql directory.
+        NOTE 1:  The socket information can be obtained from the my.cnf
+            file under ~/mysql directory.
+        NOTE 2:  The --defaults-extra-file option will be overridden if there
+            is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
+            of the user running this program.  The extras file will in effect
+            be ignored.
 
         Slave configuration file format (config/slave.txt.TEMPLATE)
             # Slave configuration
