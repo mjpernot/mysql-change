@@ -40,6 +40,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - is_slv_up:  Changed variables to standard naming convention.
 - Documentation updates.
 
+### Removed
+- Removed unused library modules.
+
 
 ## [3.0.1] - 2018-12-06
 ### Changed
