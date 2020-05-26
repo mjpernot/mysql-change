@@ -13,7 +13,7 @@
     Warning:  This program will allow the changing of the slaves databases to
         new replication configurations, but it does not update the
         slave configuration files or creates new master configuration
-        files.  This must be done outside the scope of this program.
+        files.  This must be done manually outside the scope of this program.
 
     Usage:
         mysql_rep_change.py -c cfg_file -d path -s [path/]slave.txt
@@ -37,7 +37,7 @@
             between the current master and new master.
         -S -> Take a slave that is under a slave/master and move it to
             under the master that is hosting the slave/master
-            (Current Topology:  Master -> Slave/Master -> Slave)
+            (Current Topology:  Master -> Slave1/Master -> Slave2)
             (New Topology:  Master -> Slave1
                             Master -> Slave2)
         -m name => Name of the new master or new Master config file.
@@ -66,16 +66,16 @@
             port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
 
-            NOTE 1:  Include the cfg_file even if running remotely as the
-                file will be used in future releases.
-            NOTE 2:  In MySQL 5.6 - it now gives warning if password is
-                passed on the command line.  To suppress this warning, will
-                require the use of the --defaults-extra-file option
-                (i.e. extra_def_file) in the database configuration file.
-                See below for the defaults-extra-file format.
+        NOTE 1:  Include the cfg_file even if running remotely as the file will
+            be used in future releases.
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the defaults-extra-file
+            format.
 
-            configuration modules -> name is runtime dependent as it can be
-                used to connect to different databases with different names.
+        configuration modules -> name is runtime dependent as it can be used to
+            connect to different databases with different names.
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
@@ -100,7 +100,7 @@
             port = 3306
             serv_os = Linux
 
-            NOTE:  Create a Slave configration section for each slave.
+        NOTE:  Create a Slave configration section for each slave.
 
     Example:
         mysql_rep_change.py -c master -d config -s slaves.txt -M
