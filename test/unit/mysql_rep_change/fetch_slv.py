@@ -28,7 +28,6 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import lib.gen_libs as gen_libs
 import mysql_rep_change
 import version
 
@@ -100,8 +99,8 @@ class UnitTest(unittest.TestCase):
 
         mock_find.return_value = None
 
-        slave, err_flag, err_msg = mysql_rep_change.fetch_slv(
-            self.slaves, slv_mv=self.slv_mv)
+        _, err_flag, err_msg = mysql_rep_change.fetch_slv(self.slaves,
+                                                          slv_mv=self.slv_mv)
 
         self.assertEqual((err_flag, err_msg), (True, self.msg))
 
@@ -118,8 +117,8 @@ class UnitTest(unittest.TestCase):
 
         mock_find.return_value = self.slave
 
-        slave, err_flag, err_msg = mysql_rep_change.fetch_slv(
-            self.slaves, slv_mv=self.slv_mv)
+        _, err_flag, err_msg = mysql_rep_change.fetch_slv(self.slaves,
+                                                          slv_mv=self.slv_mv)
 
         self.assertEqual((err_flag, err_msg), (False, None))
 

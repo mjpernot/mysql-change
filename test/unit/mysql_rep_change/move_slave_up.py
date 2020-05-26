@@ -28,7 +28,6 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import lib.gen_libs as gen_libs
 import mysql_rep_change
 import version
 
@@ -199,9 +198,10 @@ class UnitTest(unittest.TestCase):
         mock_mst.return_value = self.master
         mock_slv.return_value = self.slave
 
-        self.assertEqual(mysql_rep_change.move_slave_up(
-            self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-            (False, None))
+        self.assertEqual(
+            mysql_rep_change.move_slave_up(
+                self.master, self.slaves, args=self.args,
+                new_mst=self.new_mst), (False, None))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
@@ -226,9 +226,10 @@ class UnitTest(unittest.TestCase):
         mock_mst.return_value = self.master
         mock_slv.return_value = self.slave
 
-        self.assertEqual(mysql_rep_change.move_slave_up(
-            self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-            (True, self.err_msg2))
+        self.assertEqual(
+            mysql_rep_change.move_slave_up(
+                self.master, self.slaves, args=self.args,
+                new_mst=self.new_mst), (True, self.err_msg2))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
@@ -251,9 +252,10 @@ class UnitTest(unittest.TestCase):
         mock_mst.return_value = self.master
         mock_slv.return_value = self.slave
 
-        self.assertEqual(mysql_rep_change.move_slave_up(
-            self.master, self.slaves, args=self.args, new_mst=self.new_mst),
-            (True, self.err_msg))
+        self.assertEqual(
+            mysql_rep_change.move_slave_up(
+                self.master, self.slaves, args=self.args,
+                new_mst=self.new_mst), (True, self.err_msg))
 
     @mock.patch("mysql_rep_change.fetch_slv")
     def test_fetch_slv_fails(self, mock_fetch):

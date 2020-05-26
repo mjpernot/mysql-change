@@ -47,7 +47,14 @@ def move_slave(master, slave, **kwargs):
 
     """
 
-    return False, None
+    status = False
+    msg = None
+    args_array = dict(kwargs.get("args"))
+
+    if master and slave and args_array:
+        status = False
+
+    return status, msg
 
 
 def move_slave_up(master, slave, **kwargs):
@@ -62,7 +69,14 @@ def move_slave_up(master, slave, **kwargs):
 
     """
 
-    return True, "Error Message"
+    status = True
+    msg = "Error Message"
+    args_array = dict(kwargs.get("args"))
+
+    if master and slave and args_array:
+        status = True
+
+    return status, msg
 
 
 class UnitTest(unittest.TestCase):

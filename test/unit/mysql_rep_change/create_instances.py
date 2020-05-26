@@ -28,7 +28,6 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import lib.gen_libs as gen_libs
 import mysql_rep_change
 import version
 
