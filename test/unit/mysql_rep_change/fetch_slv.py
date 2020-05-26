@@ -87,7 +87,6 @@ class UnitTest(unittest.TestCase):
         self.slv_mv = "SlaveName"
         self.msg = "Error:  Slave SlaveName was not found in slave array."
 
-    #@unittest.skip("Bug: slv is not initialized anywhere in function")
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
     def test_no_found_slave(self, mock_find):
 
