@@ -4,6 +4,46 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.2] - 2020-04-24
+### Added
+- Added ProgramLock class to prevent multiple runs at the same time.
+
+### Fixed
+- move_slave_up:  Fixed disconnect from new master and slave/master.
+- fetch_slv:  Fixed problem with mutable default arguments issue.
+- crt_slv_mst:  Fixed problem with mutable default arguments issue.
+- mv_slv_to_new_mst:  Fixed problem with mutable default arguments issue.
+- move_slave:  Fixed problem with mutable default arguments issue.
+- move_slave_up:  Fixed problem with mutable default arguments issue.
+- create_instances:  Fixed problem with mutable default arguments issue.
+- run_program:  Fixed problem with mutable default arguments issue.
+- crt_slv_mst:  Fixed naming conflict between arguments.
+- move_slave_up:  Setup connect to new master connection and to new slave master connection.
+- crt_slv_mst:  Setup connect to new master connection.
+- create_instances:  Setup connect to master connection.
+- mv_slv_to_new_mst:  Fixed naming conflict between arguments.
+- main:  Fixed handling command line arguments from SonarQube scan finding.
+- fetch_slv:  Fixed incorrect reference to slave name variable.
+
+### Changed
+- run_program:  Replaced "for" and "if" statements with an intersect loop to call functions.
+- main:  Added ProgramLock class to implement program locking.
+- config/slave.txt.TEMPLATE:  Changed format of file.
+- main:  Refactored the "if" statements to streamline the checks.
+- run_program:  Changed variables to standard naming convention.
+- create_instances:  Changed variables to standard naming convention.
+- move_slave_up:  Changed variables to standard naming convention.
+- move_slave:  Changed variables to standard naming convention.
+- mv_slv_to_new_mst:  Changed variables to standard naming convention.
+- crt_slv_mst:  Changed variables to standard naming convention.
+- fetch_slv:  Changed variables to standard naming convention.
+- is_slv_up:  Changed variables to standard naming convention.
+- Documentation updates.
+
+### Removed
+- Removed unused library modules.
+
+
 ## [3.0.1] - 2018-12-06
 ### Changed
 - Documentation updates.
@@ -35,7 +75,7 @@ Breaking Change
 ### Changed
 - Convert program to use local libraries from ./lib directory.
 - Change single quotes to double quotes.
-- Help_Message: Replace docstring with printing the programs __doc__.
+- Help_Message: Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [2.0.0] - 2016-11-18

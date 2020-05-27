@@ -2,13 +2,13 @@
 # Classification (U)
 # Unclassified until filled in.
 # Slave 1 Configuration
-user = root
-passwd = {ROOT_PASSWORD}
+user = USER
+passwd = PASSWORD
 # MySQL DB host information
-host = {SERVER_IP}
-name = {HOST_NAME}
+host = SERVER_IP
+name = HOST_NAME
 # MySQL database server id - unique to each database
-sid = {SERVER_ID}
+sid = SERVER_ID
 # MySQL configuration settings
 cfg_file = None
 # MySQL database port (default is 3306)
