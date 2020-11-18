@@ -372,7 +372,8 @@ def move_slave_up(master, slaves, **kwargs):
 
     slv_master = mysql_class.SlaveRep(
         master.name, master.server_id, master.sql_user, master.sql_pass,
-        master.machine, master.host, master.port, master.defaults_file)
+        os_type=master.machine, host=master.host, port=master.port,
+        defaults_file=master.defaults_file)
     slv_master.connect()
 
     err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
