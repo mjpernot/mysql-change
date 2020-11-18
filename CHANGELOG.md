@@ -5,9 +5,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.0.3] - 2020-11-18
+- Updated to use the mysql_libs v5.0.0 library.
 
 ### Fixed
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+
+### Changed
+- config/slave.txt.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
 
 
 ## [3.0.2] - 2020-04-24
