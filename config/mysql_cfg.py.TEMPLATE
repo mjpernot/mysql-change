@@ -2,14 +2,14 @@
 # Classification (U)
 # Unclassified until filled in.
 user = 'USER'
-passwd = 'PASSWORD'
+japd = 'PSWORD'
 # MySQL DB host information
 host = 'SERVER_IP'
 name = 'HOST_NAME'
 # MySQL database server id - unique to each database
 sid = SERVER_ID
 # MySQL Definition configuration file
-extra_def_file = 'DIRECTORY_PATH/config/mysql.cfg'
+extra_def_file = 'PYTHON_PROJECT/config/mysql.cfg'
 # Server running OS
 serv_os = 'Linux'
 # MySQL database port (default is 3306)
