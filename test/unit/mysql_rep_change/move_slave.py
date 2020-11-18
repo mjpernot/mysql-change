@@ -65,6 +65,9 @@ class MasterRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
+        self.extra_def_file = "FileName"
 
     def upd_mst_status(self):
 
@@ -138,6 +141,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.master = MasterRep()
+        self.new_master = MasterRep()
         self.slave = SlaveRep()
         self.slaves = [self.slave]
         self.err_msg = "Error: Fetch Failed"
@@ -150,13 +154,12 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.crt_slv_mst",
-                mock.Mock(return_value=("NewMaster", False, None)))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst",
                 mock.Mock(return_value=(False, None)))
-    def test_no_r_option(self):
+    @mock.patch("mysql_rep_change.crt_slv_mst")
+    def test_no_r_option(self, mock_newmst):
 
         """Function:  test_no_r_option
 
@@ -165,6 +168,8 @@ class UnitTest(unittest.TestCase):
         Arguments:
 
         """
+
+        mock_newmst.return_value = (self.new_master, False, None)
 
         self.assertEqual(
             mysql_rep_change.move_slave(
@@ -180,13 +185,12 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.crt_slv_mst",
-                mock.Mock(return_value=("NewMaster", False, None)))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst",
                 mock.Mock(return_value=(False, None)))
-    def test_r_option(self):
+    @mock.patch("mysql_rep_change.crt_slv_mst")
+    def test_r_option(self, mock_newmst):
 
         """Function:  test_r_option
 
@@ -196,6 +200,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_newmst.return_value = (self.new_master, False, None)
+
         self.assertEqual(
             mysql_rep_change.move_slave(
                 self.master, self.slaves, args=self.args,
@@ -203,12 +209,11 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.crt_slv_mst",
-                mock.Mock(return_value=("NewMaster", False, None)))
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
+    @mock.patch("mysql_rep_change.crt_slv_mst")
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst")
-    def test_move_fails(self, mock_move):
+    def test_move_fails(self, mock_move, mock_newmst):
 
         """Function:  test_move_fails
 
@@ -218,6 +223,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_newmst.return_value = (self.new_master, False, None)
         mock_move.return_value = (True, self.err_msg3)
 
         self.assertEqual(
