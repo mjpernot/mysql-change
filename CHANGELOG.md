@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - config/mysql_cfg.py.TEMPLATE:  Changed entry to work with mysql_libs v5.0.0 library.
 - config/slave.txt.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
+- Documentation updates.
 
 
 ## [3.0.2] - 2020-04-24

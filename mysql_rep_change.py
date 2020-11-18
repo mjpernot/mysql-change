@@ -55,9 +55,9 @@
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
-            # Configuration file for {Database Name/Server}
+            # Configuration file for Database Server.
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             sid = SERVER_ID
@@ -80,7 +80,7 @@
         Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
             password="PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            socket="DIRECTORY_PATH/mysqld.sock"
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
@@ -92,13 +92,16 @@
         Slave configuration file format (config/slave.txt.TEMPLATE)
             # Slave configuration
             user = USER
-            passwd = PASSWORD
-            host = IP_ADDRESS
-            name = HOSTNAME
+            japd = PSWORD
+            rep_user = REP_USER
+            rep_japd = REP_PSWORD
+            host = HOST_IP
+            name = HOST_NAME
             sid = SERVER_ID
             cfg_file = None
             port = 3306
             serv_os = Linux
+            extra_def_file = DIRECTORY_PATH/mysql.cfg
 
         NOTE:  Create a Slave configration section for each slave.
 
