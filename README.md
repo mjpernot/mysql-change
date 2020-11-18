@@ -68,17 +68,10 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
 # Configuration:
   * Replace **PYTHON_PROJECT** with the baseline path of the python program.
 
-Create MySQL configuration file.
-
-```
-cd config
-cp mysql_cfg.py.TEMPLATE mysql_cfg.py
-```
-
-Make the appropriate change to the environment.
+Create MySQL configuration file and make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
     - user = "USER"
-    - passwd = "PASSWORD"
+    - japd = "PSWORD"
     - host = "SERVER_IP"
     - name = "HOST_NAME"
     - sid = SERVER_ID
@@ -89,39 +82,33 @@ Make the appropriate change to the environment.
     - port = 3306
 
 ```
+cd config
+cp mysql_cfg.py.TEMPLATE mysql_cfg.py
 vim mysql_cfg.py
 chmod 600 mysql_cfg.py
 ```
 
-Create MySQL definition file.
+Create MySQL definition file and make the appropriate change to the environment.
+  * Change these entries in the MySQL definition file:
+    - password="PASSWORD"
+    - socket="DIRECTORY_PATH/mysqld.sock"
 
 ```
 cp mysql.cfg.TEMPLATE mysql.cfg
-```
-
-Make the appropriate change to the environment.
-  * Change these entries in the MySQL definition file:
-    - password="PASSWORD"
-    - socket="DIRECTORY_PATH/mysql.sock"
-
-```
 vim mysql.cfg
 chmod 600 mysql.cfg
 ```
 
-Create a MySQL slave configuration file.
-
-```
-cp slave.txt.TEMPLATE slave.txt
-```
-
-Make the appropriate change to the environment.
+Create a MySQL slave configuration file and make the appropriate change to the environment.
   * Change these entries in the MySQL slave setup:
     - user = USER
-    - passwd = PASSWORD
-    - host = IP_ADDRESS
-    - name = HOSTNAME
+    - japd = PSWORD
+    - rep_user = REP_USER
+    - rep_japd = REP_PSWORD
+    - host = HOST_IP
+    - name = HOST_NAME
     - sid = SERVER_ID
+    - extra_def_file = DIRECTORY_PATH/mysql.cfg
   * Change these entries only if required:
     - cfg_file = None
     - serv_os = Linux
@@ -129,6 +116,7 @@ Make the appropriate change to the environment.
   * NOTE:  Create a new set of entries for each slave in the MySQL replica set.
 
 ```
+cp slave.txt.TEMPLATE slave.txt
 vim slave.txt
 chmod 600 slave.txt
 ```
@@ -147,8 +135,6 @@ chmod 600 slave.txt
 # Testing:
 
 # Unit Testing:
-
-### Description: Testing consists of unit testing for the functions in the mysql_rep_change.py program.
 
 ### Installation:
 
