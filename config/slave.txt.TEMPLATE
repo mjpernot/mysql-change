@@ -3,7 +3,7 @@
 # Unclassified until filled in.
 # Slave 1 Configuration
 user = USER
-jap = PSWORD
+japd = PSWORD
 # Replication user information
 rep_user = REP_USER
 rep_japd = REP_PSWORD
