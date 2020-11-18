@@ -226,7 +226,10 @@ def crt_slv_mst(slaves, **kwargs):
         else:
             new_master = mysql_class.MasterRep(
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
-                slv.machine, slv.host, slv.port, slv.defaults_file)
+                slv.machine, host=slv.host, port=slv.port,
+                defaults_file=slv.defaults_file,
+                extra_def_file=slv.extra_def_file,
+                rep_user=slv.rep_user, rep_japd=slv.rep_japd)
             new_master.connect()
 
     else:
