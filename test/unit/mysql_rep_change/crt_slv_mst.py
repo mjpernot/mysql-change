@@ -65,6 +65,9 @@ class MasterRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
+        self.extra_def_file = "FileName"
 
     def connect(self):
 
@@ -110,6 +113,9 @@ class SlaveRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
+        self.extra_def_file = "FileName"
 
     def connect(self):
 
