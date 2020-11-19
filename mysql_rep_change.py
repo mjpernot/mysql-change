@@ -228,8 +228,7 @@ def crt_slv_mst(slaves, **kwargs):
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
                 slv.machine, host=slv.host, port=slv.port,
                 defaults_file=slv.defaults_file,
-                extra_def_file=slv.extra_def_file,
-                rep_user=slv.rep_user, rep_japd=slv.rep_japd)
+                extra_def_file=slv.extra_def_file)
             new_master.connect()
 
     else:
@@ -315,6 +314,14 @@ def move_slave(master, slaves, **kwargs):
 
     if err_flag:
         return err_flag, err_msg
+
+    else:
+        # Set new master rep user information
+        #   Temporary fix until SlaveRep allows for rep user information.
+        #   NOTE:  This fix uses the existing master's rep user information and
+        #       not the rep user information in the slave config file.
+        new_master.rep_user = master.rep_user
+        new_master.rep_japd = master.rep_japd
 
     err_flag, err_msg = mv_slv_to_new_mst(
         master, slaves, new_master, slave_move, **kwargs)
