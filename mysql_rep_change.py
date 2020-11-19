@@ -121,6 +121,7 @@ import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
+import lib.machine as machine
 import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class
 import version
@@ -226,7 +227,7 @@ def crt_slv_mst(slaves, **kwargs):
         else:
             new_master = mysql_class.MasterRep(
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
-                slv.machine, host=slv.host, port=slv.port,
+                os_type=slv.machine, host=slv.host, port=slv.port,
                 defaults_file=slv.defaults_file,
                 extra_def_file=slv.extra_def_file)
             new_master.connect()
@@ -421,8 +422,13 @@ def create_instances(args_array, **kwargs):
     """
 
     args_array = dict(args_array)
-    master = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.MasterRep)
+    cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    master = mysql_class.MasterRep(
+        cfg.name, cfg.sid, cfg.user, cfg.japd,
+        os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
+        defaults_file=cfg.cfg_file,
+        extra_def_file=cfg.__dict__.get("extra_def_file", None),
+        rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
     master.connect()
     slaves = []
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],
