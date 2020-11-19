@@ -137,6 +137,39 @@ class SlaveRep(object):
         return True
 
 
+class Cfg(object):
+
+    """Class:  Cfg
+
+    Description:  Stub holder for configuration file.
+
+    Methods:
+        __init__ -> Class initialization.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "name"
+        self.sid = 10
+        self.user = "user"
+        self.japd = None
+        self.serv_os = "Linux"
+        self.host = "hostname"
+        self.port = 3306
+        self.cfg_file = "cfg_file"
+        self.rep_user = "repuser"
+        self.rep_japd = None
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -162,6 +195,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.cfg = Cfg()
         self.master = MasterRep()
         self.slave = SlaveRep()
         self.slaves = [self.slave]
@@ -182,9 +216,10 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
+    @mock.patch("mysql_rep_change.gen_libs.load_module")
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_slave_moved(self, mock_sync, mock_mst, mock_slv):
+    def test_slave_moved(self, mock_sync, mock_inst, mock_cfg, mock_slv):
 
         """Function:  test_slave_moved
 
@@ -195,7 +230,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.side_effect = [(False, None), (False, None)]
-        mock_mst.return_value = self.master
+        mock_inst.return_value = self.master
+        mock_cfg.return_value = self.cfg
         mock_slv.return_value = self.slave
 
         self.assertEqual(
@@ -210,9 +246,10 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
+    @mock.patch("mysql_rep_change.gen_libs.load_module")
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_find_slave_fails(self, mock_sync, mock_mst, mock_slv):
+    def test_find_slave_fails(self, mock_sync, mock_inst, mock_cfg, mock_slv):
 
         """Function:  test_find_slave_fails
 
@@ -223,7 +260,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.side_effect = [(False, None), (True, self.err_msg2)]
-        mock_mst.return_value = self.master
+        mock_inst.return_value = self.master
+        mock_cfg.return_value = self.cfg
         mock_slv.return_value = self.slave
 
         self.assertEqual(
@@ -236,9 +274,10 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mysql_class.SlaveRep")
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
+    @mock.patch("mysql_rep_change.gen_libs.load_module")
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
-    def test_sync_slave_fails(self, mock_sync, mock_mst, mock_slv):
+    def test_sync_slave_fails(self, mock_sync, mock_inst, mock_cfg, mock_slv):
 
         """Function:  test_sync_slave_fails
 
@@ -249,7 +288,8 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_sync.return_value = (True, self.err_msg)
-        mock_mst.return_value = self.master
+        mock_inst.return_value = self.master
+        mock_cfg.return_value = self.cfg
         mock_slv.return_value = self.slave
 
         self.assertEqual(
