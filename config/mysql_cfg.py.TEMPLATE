@@ -3,6 +3,9 @@
 # Unclassified until filled in.
 user = "USER"
 japd = "PSWORD"
+# Replication user information
+rep_user = "REP_USER"
+rep_japd = "REP_PSWORD"
 # MySQL DB host information
 host = "SERVER_IP"
 name = "HOST_NAME"
