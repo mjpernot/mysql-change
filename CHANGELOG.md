@@ -12,6 +12,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- move_slave_up:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
 - create_instances:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
 - move_slave_up:  Changed arguments from positional to keywords for SlaveRep instance call.
 - crt_slv_mst:  Added replication user to MasteRep instance call.

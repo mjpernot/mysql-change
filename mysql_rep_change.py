@@ -374,16 +374,19 @@ def move_slave_up(master, slaves, **kwargs):
     if err_flag:
         return err_flag, err_msg
 
-    new_master = mysql_libs.create_instance(
-        kwargs.get("new_mst"), args_array["-d"], mysql_class.MasterRep)
+    cfg = gen_libs.load_module(kwargs.get("new_mst"), args_array["-d"])
+    new_master = mysql_class.MasterRep(
+        cfg.name, cfg.sid, cfg.user, cfg.japd,
+        os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
+        defaults_file=cfg.cfg_file,
+        extra_def_file=cfg.__dict__.get("extra_def_file", None),
+        rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
     new_master.connect()
-
     slv_master = mysql_class.SlaveRep(
         master.name, master.server_id, master.sql_user, master.sql_pass,
         os_type=master.machine, host=master.host, port=master.port,
         defaults_file=master.defaults_file)
     slv_master.connect()
-
     err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
 
     if err_flag:
