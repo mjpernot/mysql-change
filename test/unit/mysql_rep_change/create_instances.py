@@ -79,6 +79,39 @@ class MasterRep(object):
         return True
 
 
+class Cfg(object):
+
+    """Class:  Cfg
+
+    Description:  Stub holder for configuration file.
+
+    Methods:
+        __init__ -> Class initialization.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "name"
+        self.sid = 10
+        self.user = "user"
+        self.japd = None
+        self.serv_os = "Linux"
+        self.host = "hostname"
+        self.port = 3306
+        self.cfg_file = "cfg_file"
+        self.rep_user = "repuser"
+        self.rep_japd = None
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -101,6 +134,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.cfg = Cfg()
         self.master = MasterRep()
         self.args_array = {"-c": "mysql_cfg", "-d": "config", "-s": "slave"}
         self.name = "Server_Name"
@@ -109,8 +143,9 @@ class UnitTest(unittest.TestCase):
                 mock.Mock(return_value="SlaveArray"))
     @mock.patch("mysql_rep_change.cmds_gen.create_cfg_array",
                 mock.Mock(return_value=[]))
-    @mock.patch("mysql_rep_change.mysql_libs.create_instance")
-    def test_create_instances(self, mock_inst):
+    @mock.patch("mysql_rep_change.gen_libs.load_module")
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
+    def test_create_instances(self, mock_inst, mock_cfg):
 
         """Function:  test_create_instances
 
@@ -121,6 +156,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_inst.return_value = self.master
+        mock_cfg.return_value = self.cfg
 
         master, slaves = mysql_rep_change.create_instances(self.args_array)
 
