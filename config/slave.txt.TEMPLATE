@@ -8,6 +8,7 @@ japd = PSWORD
 rep_user = REP_USER
 rep_japd = REP_PSWORD
 # MySQL DB host information
+# DO NOT USE 127.0.0.1 or localhost for the master, use actual IP.
 host = HOST_IP
 name = HOST_NAME
 # MySQL database server id - unique to each database
