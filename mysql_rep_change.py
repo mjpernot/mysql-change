@@ -16,40 +16,51 @@
         files.  This must be done manually outside the scope of this program.
 
     Usage:
-        mysql_rep_change.py -c cfg_file -d path -s [path/]slave.txt
-            {-M -m master_name -n slave_name } |
-            {-R -m master_name -n slave_name } |
-            {-S -m new_master_cfg -n slave_name}
+        mysql_rep_change.py -c cfg_file -d path -s [path/]file
+            {-M -m new_master_name -n slave_name |
+             -R -m new_master_name -n slave_name |
+             -S -m new_master -n slave_name}
             [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c cfg_file => Current Master config file.  Is loaded as a python, do
             not include the .py extension with the name.  Required arg.
-        -s [path/]slave_file => Slave config file.  Will be a text file.
-            Include the file extension with the name.  Can include the path or
-            use the -d option path.  Required arg.
+        -s [path/]file => Slave config file.  Will be a text file.  Include the
+            file extension with the name.  Can include the path or use the -d
+            option path.  Required arg.
         -d dir path => Directory path to the config files. Required arg.
-        -M -> Move slave in a slave array to under another slave in the
-            same slave array.
-        -R -> Move slave in a slave array to under another slave in the
-            same slave array and remove the replication connection
-            between the current master and new master.
-        -S -> Take a slave that is under a slave/master and move it to
-            under the master that is hosting the slave/master
-            (Current Topology:  Master -> Slave1/Master -> Slave2)
-            (New Topology:  Master -> Slave1
-                            Master -> Slave2)
-        -m name => Name of the new master or new Master config file.
-        -n name => Name of a slave to be moved to the new master.
+
+        -M -> Move slave in a slave array to under another slave in the same
+                slave array.
+            -m new_master_name => Name of the new master from slave cfg file.
+            -n slave_name => Name of a slave to be moved to the new master.
+
+        -R -> Move slave in a slave array to under another slave in the same
+                slave array and remove the replication connection between the
+                current master and new master.
+            -m new_master_name => Name of the new master from slave cfg file.
+            -n slave_name => Name of a slave to be moved to the new master.
+
+        -S -> Take a slave that is under a slave/master and move it to under
+                the master that is hosting the slave/master
+                (Current Topology:  New_Master -> Slave1/Master -> Slave2)
+                (New Topology:  New_Master -> Slave1
+                                New_Master -> Slave2)
+            -m new_master => Name of the New_Master config file.
+            -n slave_name => Name of a slave to be moved to the New_Master.
+
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v or -h overrides the other options.
+
         NOTE 2:  -M, -R, and -S are XOR arguments.
+
         NOTE 3:  -M and -R options:  The name for -m option is the server_name
             entry from the slave configuration file.
+
         NOTE 4:  -S option:  The -m is a master configuration file name
             (minus .py extension).
 
@@ -58,6 +69,8 @@
             # Configuration file for Database Server.
             user = "USER"
             japd = "PSWORD"
+            rep_user = REP_USER
+            rep_japd = REP_PSWORD
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             sid = SERVER_ID
@@ -68,6 +81,7 @@
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
@@ -84,6 +98,7 @@
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+
         NOTE 2:  The --defaults-extra-file option will be overridden if there
             is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
             of the user running this program.  The extras file will in effect
@@ -107,7 +122,7 @@
 
     Example:
         mysql_rep_change.py -c master -d config -s slaves.txt -M
-            -m new_master_name -n slave_name
+            -m new_master -n slave_name
 
 """
 
