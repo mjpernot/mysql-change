@@ -7,7 +7,8 @@ japd = "PSWORD"
 rep_user = "REP_USER"
 rep_japd = "REP_PSWORD"
 # MySQL DB host information
-host = "SERVER_IP"
+# DO NOT USE 127.0.0.1 or localhost for the master, use actual IP.
+host = "HOST_IP"
 name = "HOST_NAME"
 # MySQL database server id - unique to each database
 sid = SERVER_ID
@@ -18,5 +19,4 @@ serv_os = "Linux"
 # MySQL database port (default is 3306)
 port = 3306
 # MySQL configuration settings
-# Example: cfg_file = "/opt/lamp/mysql/my.cnf"
-cfg_file = "DIRECTORY_PATH/my.cnf"
+cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
