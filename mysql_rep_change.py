@@ -71,8 +71,8 @@
             japd = "PSWORD"
             rep_user = REP_USER
             rep_japd = REP_PSWORD
-            host = "IP_ADDRESS"
-            name = "HOSTNAME"
+            host = "HOST_IP"
+            name = "HOST_NAME"
             sid = SERVER_ID
             extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
             serv_os = "Linux"
