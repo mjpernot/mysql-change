@@ -65,6 +65,8 @@ class MasterRep(object):
         self.machine = "Linux"
         self.host = "HostName"
         self.port = 3306
+        self.rep_user = "RepUser"
+        self.rep_japd = None
         self.defaults_file = None
 
     def upd_mst_status(self):
@@ -122,6 +124,8 @@ class SlaveRep(object):
         self.machine = "Linux"
         self.host = "HostName"
         self.port = 3306
+        self.rep_user = "RepUser"
+        self.rep_japd = None
         self.defaults_file = None
 
     def connect(self):
