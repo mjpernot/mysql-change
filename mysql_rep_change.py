@@ -475,7 +475,8 @@ def run_program(args_array, func_dict, **kwargs):
     func_dict = dict(func_dict)
     master, slaves = create_instances(args_array)
 
-    if master and slaves:
+    if master and slaves and master.conn \
+       and not [False for item in slaves if not item.conn]:
 
         # Intersect args_array and func_dict to call function.
         for item in set(args_array.keys()) & set(func_dict.keys()):
@@ -491,7 +492,7 @@ def run_program(args_array, func_dict, **kwargs):
 
     else:
         cmds_gen.disconnect(master, slaves)
-        print("Error:  Master and/or Slaves instances not created.")
+        print("Error:  Instance/Connection problem to Master and/or Slaves.")
 
 
 def main():
