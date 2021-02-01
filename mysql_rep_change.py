@@ -244,7 +244,8 @@ def crt_slv_mst(slaves, **kwargs):
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
                 os_type=slv.machine, host=slv.host, port=slv.port,
                 defaults_file=slv.defaults_file,
-                extra_def_file=slv.extra_def_file)
+                extra_def_file=slv.extra_def_file, rep_user=slv.rep_user,
+                rep_japd=slv.rep_japd)
             new_master.connect()
 
     else:

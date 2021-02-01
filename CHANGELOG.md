@@ -12,10 +12,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- crt_slv_mst:  Added replication user to MasteRep instance call.
 - move_slave_up:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
 - create_instances:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
 - move_slave_up:  Changed arguments from positional to keywords for SlaveRep instance call.
-- crt_slv_mst:  Added replication user to MasteRep instance call.
+- crt_slv_mst:  Changed arguments from positional to keywords for MasterRep instance call.
 - config/mysql_cfg.py.TEMPLATE:  Changed entry to work with mysql_libs v5.0.0 library.
 - config/slave.txt.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
 - config/mysql_cfg.py.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
