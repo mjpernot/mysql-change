@@ -334,7 +334,8 @@ def move_slave(master, slaves, **kwargs):
 
     else:
         # Set new master rep user information
-        #   Temporary fix until SlaveRep allows for rep user information.
+        #   Temporary fix until mysql_libs.create_slv_array allows for rep user
+        #       information.
         #   NOTE:  This fix uses the existing master's rep user information and
         #       not the rep user information in the slave config file.
         new_master.rep_user = master.rep_user
@@ -401,7 +402,8 @@ def move_slave_up(master, slaves, **kwargs):
     slv_master = mysql_class.SlaveRep(
         master.name, master.server_id, master.sql_user, master.sql_pass,
         os_type=master.machine, host=master.host, port=master.port,
-        defaults_file=master.defaults_file)
+        defaults_file=master.defaults_file, rep_user=master.rep_user,
+        rep_japd=master.rep_japd)
     slv_master.connect()
     err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
 
