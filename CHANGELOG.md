@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.0.0 library.
 
 ### Fixed
+- mv_slv_to_new_mst:  Does not start slaves if sync fails on a database.
 - run_program:  Check for connection status of master and slaves before processing begins.
 - move_slave:  Set new MasterRep's instance rep user information to that of the existing MasterRep's instance.  Temporary fix until SlaveRep allows for rep user information.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.

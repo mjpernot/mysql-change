@@ -286,15 +286,15 @@ def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):
         if err_flag:
             break
 
-    # If the loop completes, then "Change Master To" can be ran.
+    # Only run if loop completes without error.
     else:
         # Get latest log position.
         new_master.upd_mst_status()
         mysql_libs.change_master_to(new_master, slave_move)
 
-    mysql_libs.chg_slv_state(
-        [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slave_move],
-        "start")
+        mysql_libs.chg_slv_state(
+            [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slave_move],
+            "start")
 
     return err_flag, err_msg
 
