@@ -70,6 +70,7 @@ class MasterRep(object):
         self.rep_japd = None
         self.extra_def_file = "FileName"
         self.conn = True
+        self.conn_msg = None
 
 
 class SlaveRep(object):
@@ -107,6 +108,7 @@ class SlaveRep(object):
         self.rep_japd = None
         self.extra_def_file = "FileName"
         self.conn = True
+        self.conn_msg = None
 
 
 def move_slave(master, slave, **kwargs):
@@ -161,11 +163,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_no_master_slave_conn -> Test with no master and slave connection.
         test_two_no_slave_conn -> Test with two no slave connections.
         test_one_no_slave_conn -> Test with one no slave connection.
         test_no_master_conn -> Test with no master connection.
-        test_no_slaves -> Test with no slave instances.
-        test_no_master -> Test with no master instance.
         test_with_option_fails -> Test with option failing.
         test_with_multiple_options -> Test with multiple options selected.
         test_with_option -> Test with option selected.
@@ -183,6 +184,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.err_msg = "Connection Error"
         self.args_array = {"-m": "master", "-n": "slaves"}
         self.args_array2 = {"-m": "master", "-n": "slaves", "-M": True}
         self.args_array3 = {"-m": "master", "-n": "slaves", "-M": True,
@@ -193,15 +195,37 @@ class UnitTest(unittest.TestCase):
         self.master = MasterRep()
         self.master2 = MasterRep()
         self.master2.conn = False
+        self.master2.conn_msg = self.err_msg
         self.slave = SlaveRep()
         self.slave2 = SlaveRep()
         self.slave3 = SlaveRep()
         self.slave3.conn = False
+        self.slave3.conn_msg = self.err_msg
         self.slave4 = SlaveRep()
         self.slave4.conn = False
+        self.slave4.conn_msg = self.err_msg
         self.slave_list = [self.slave, self.slave2]
         self.slave_list2 = [self.slave, self.slave2, self.slave3]
         self.slave_list3 = [self.slave, self.slave2, self.slave3, self.slave4]
+
+    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_no_master_slave_conn(self, mock_create):
+
+        """Function:  test_no_master_slave_conn
+
+        Description:  Test with no master and slave connection.
+
+        Arguments:
+
+        """
+
+        mock_create.return_value = (self.master2, self.slave_list2)
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
+                                                          self.func_dict))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
@@ -258,44 +282,6 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_dict))
-
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
-                mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances")
-    def test_no_slaves(self, mock_create):
-
-        """Function:  test_no_slaves
-
-        Description:  Test with no slave instances.
-
-        Arguments:
-
-        """
-
-        mock_create.return_value = (self.master, [])
-
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array,
-                                                          self.func_dict))
-
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
-                mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances")
-    def test_no_master(self, mock_create):
-
-        """Function:  test_no_master
-
-        Description:  Test with no master instance.
-
-        Arguments:
-
-        """
-
-        mock_create.return_value = (None, self.slave_list)
-
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array,
                                                           self.func_dict))
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
