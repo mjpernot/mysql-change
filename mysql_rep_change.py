@@ -245,6 +245,12 @@ def crt_slv_mst(slaves, **kwargs):
                 rep_japd=slv.rep_japd)
             new_master.connect()
 
+            if new_master.conn_msg:
+                err_flag = True
+                err_msg = "Detected problem in new master connection"
+                print("Error:  Connection problem for new master.")
+                print("\tNew Master:  %s" % (new_master.conn_msg))
+
     else:
         err_flag = True
         err_msg = "Error: Slave(new master) %s was not found in slave array." \
