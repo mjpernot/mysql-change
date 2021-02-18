@@ -155,7 +155,7 @@ def help_message():
     print(__doc__)
 
 
-def is_slv_up(slv, **kwargs):
+def is_slv_up(slv):
 
     """Function:  is_slv_up
 
@@ -425,7 +425,7 @@ def move_slave_up(master, slaves, **kwargs):
     return err_flag, err_msg
 
 
-def create_instances(args_array, **kwargs):
+def create_instances(args_array):
 
     """Function:  create_instances
 
@@ -434,8 +434,8 @@ def create_instances(args_array, **kwargs):
 
     Arguments:
         (input) args_array -> Array of command line options and values.
-        (output) MASTER -> Master instance.
-        (output) SLAVE -> Slave instance array.
+        (output) master -> Master instance.
+        (output) slave -> Slave instance list.
 
     """
 
@@ -456,7 +456,7 @@ def create_instances(args_array, **kwargs):
     return master, slaves
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args_array, func_dict):
 
     """Function:  run_program
 
