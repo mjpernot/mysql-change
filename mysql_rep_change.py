@@ -472,8 +472,8 @@ def run_program(args_array, func_dict):
     func_dict = dict(func_dict)
     master, slaves = create_instances(args_array)
 
-    if master and slaves and master.conn \
-       and not [False for item in slaves if not item.conn]:
+    if slaves and not master.conn_msg \
+       and not [False for item in slaves if item.conn_msg]:
 
         # Intersect args_array and func_dict to call function.
         for item in set(args_array.keys()) & set(func_dict.keys()):
@@ -488,8 +488,16 @@ def run_program(args_array, func_dict):
         cmds_gen.disconnect(master, slaves)
 
     else:
-        cmds_gen.disconnect(master, slaves)
-        print("Error:  Instance/Connection problem to Master and/or Slaves.")
+        print("Error:  Connection problem for master/slaves.")
+        print("\tMaster:  %s" % (master.conn_msg))
+
+        if master.conn:
+            cmds_gen.disconnect(master)
+
+        for slv in slaves:
+            print("\tSlave:  %s" % (slv.conn_msg))
+            if slv.conn:
+                cmds_gen.disconnect(slv)
 
 
 def main():

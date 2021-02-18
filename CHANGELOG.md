@@ -14,6 +14,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- run_program:  Refactored check on master and slave connection status checks.
 - Removed unneccessary \*\*kwargs from arguments lists.
 - move_slave_up:  Added replication user to SlaveRep instance call.
 - crt_slv_mst:  Added replication user to MasteRep instance call.
