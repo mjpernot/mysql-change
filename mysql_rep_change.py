@@ -55,12 +55,9 @@
         -h => Help and usage message.
 
         NOTE 1:  -v or -h overrides the other options.
-
         NOTE 2:  -M, -R, and -S are XOR arguments.
-
         NOTE 3:  -M and -R options:  The name for -m option is the server_name
             entry from the slave configuration file.
-
         NOTE 4:  -S option:  The -m is a master configuration file name
             (minus .py extension).
 
