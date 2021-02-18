@@ -29,6 +29,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_rep_change
+import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -68,6 +69,8 @@ class MasterRep(object):
         self.rep_user = "RepUser"
         self.rep_japd = None
         self.extra_def_file = "FileName"
+        self.conn = True
+        self.conn_msg = None
 
     def connect(self):
 
@@ -116,6 +119,8 @@ class SlaveRep(object):
         self.rep_user = "RepUser"
         self.rep_japd = None
         self.extra_def_file = "FileName"
+        self.conn = True
+        self.conn_msg = None
 
     def connect(self):
 
@@ -138,6 +143,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_no_new_master_conn -> Test with no new master conection failure.
         test_no_found_slave -> Test with no slave found.
         test_readonly_slave -> Test with readonly slave found.
         test_found_slave -> Test with slave found.
@@ -163,6 +169,32 @@ class UnitTest(unittest.TestCase):
             "Error:  New master SlaveName is set to read-only mode."
         self.result_msg2 = \
             "Error: Slave(new master) SlaveName was not found in slave array."
+        self.result_msg3 = "Detected problem in new master connection"
+
+    @mock.patch("mysql_rep_change.mysql_class.MasterRep")
+    @mock.patch("mysql_rep_change.mysql_libs.find_name")
+    def test_no_new_master_conn(self, mock_find, mock_mst):
+
+        """Function:  test_no_new_master_conn
+
+        Description:  Test with no new master conection failure.
+
+        Arguments:
+
+        """
+
+        self.master.conn = False
+        self.master.conn_msg = "Error Connection"
+
+        mock_find.return_value = self.slave
+        mock_mst.return_value = self.master
+
+        with gen_libs.no_std_out():
+            master, err_flag, err_msg = mysql_rep_change.crt_slv_mst(
+                self.slaves, new_mst=self.new_mst)
+
+        self.assertEqual((master.name, err_flag, err_msg),
+                         (self.name, True, self.result_msg3))
 
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
     def test_no_found_slave(self, mock_find):
