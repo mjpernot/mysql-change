@@ -154,7 +154,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.fetch_slv",
+    @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst",
                 mock.Mock(return_value=(False, None)))
@@ -185,7 +185,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.fetch_slv",
+    @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst",
                 mock.Mock(return_value=(False, None)))
@@ -209,7 +209,7 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.fetch_slv",
+    @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.crt_slv_mst")
     @mock.patch("mysql_rep_change.mv_slv_to_new_mst")
@@ -231,7 +231,7 @@ class UnitTest(unittest.TestCase):
                 self.master, self.slaves, args=self.args2),
             (True, self.err_msg3))
 
-    @mock.patch("mysql_rep_change.fetch_slv",
+    @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
     @mock.patch("mysql_rep_change.crt_slv_mst")
     def test_create_slave_fails(self, mock_crt):
@@ -249,7 +249,7 @@ class UnitTest(unittest.TestCase):
         self.assertEqual(mysql_rep_change.move_slave(
             self.master, self.slaves, args=self.args2), (True, self.err_msg2))
 
-    @mock.patch("mysql_rep_change.fetch_slv")
+    @mock.patch("mysql_rep_change.mysql_libs.fetch_slv")
     def test_fetch_slv_fails(self, mock_fetch):
 
         """Function:  test_fetch_slv_fails
