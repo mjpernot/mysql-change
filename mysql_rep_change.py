@@ -175,36 +175,6 @@ def is_slv_up(slv):
             print("SQL Error:  {0}:  {1}".format(slv.sql_err, slv.sql_msg))
 
 
-def fetch_slv(slaves, **kwargs):
-
-    """Function:  fetch_slv
-
-    Description:  Locates a slave in the slave array.
-
-    Arguments:
-        (input) slaves -> Slave instance array.
-        (input) **kwargs:
-            slv_mv -> Name of slave to be moved to new master.
-        (output) SLV -> Class instance of slave.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
-
-    """
-
-    slaves = list(slaves)
-    err_flag = False
-    err_msg = None
-    slv = None
-    slv = mysql_libs.find_name(slaves, kwargs.get("slv_mv"))
-
-    if not slv:
-        err_flag = True
-        err_msg = "Error:  Slave %s was not found in slave array." \
-                  % (kwargs.get("slv_mv"))
-
-    return slv, err_flag, err_msg
-
-
 def crt_slv_mst(slaves, **kwargs):
 
     """Function:  crt_slv_mst
@@ -325,7 +295,8 @@ def move_slave(master, slaves, **kwargs):
 
     args_array = dict(kwargs.get("args"))
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
+                                                         kwargs.get("slv_mv"))
 
     if err_flag:
         return err_flag, err_msg
@@ -389,7 +360,8 @@ def move_slave_up(master, slaves, **kwargs):
 
     args_array = dict(kwargs.get("args"))
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
+                                                         kwargs.get("slv_mv"))
 
     if err_flag:
         return err_flag, err_msg

@@ -14,6 +14,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- move_slave_up, move_slave:  Replaced fetch_slv call with mysql_libs.fetch_slv call.
 - crt_slv_mst:  Added master connection status checks.
 - move_slave_up:  Added new master and slave master connection status checks.
 - run_program:  Refactored check on master and slave connection status checks.
@@ -28,6 +29,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/slave.txt.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
 - config/mysql_cfg.py.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
 - Documentation updates.
+
+### Removed
+- fetch_slv function
 
 
 ## [3.0.2] - 2020-04-24
