@@ -384,6 +384,19 @@ def move_slave_up(master, slaves, **kwargs):
     else:
         err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
 
+        if not err_flag:
+            err_flag, err_msg = mysql_libs.sync_rep_slv(
+                master, mysql_libs.find_name(slaves, kwargs.get("slv_mv")))
+
+            if not err_flag:
+                mysql_libs.change_master_to(new_master, slave_move)
+                mysql_libs.chg_slv_state([slave_move, slv_master], "start")
+                is_slv_up(slave_move)
+                is_slv_up(slv_master)
+
+        mysql_libs.disconnect(new_master, slv_master)
+
+        """
         if err_flag:
             mysql_libs.disconnect(new_master, slv_master)
             return err_flag, err_msg
@@ -401,6 +414,7 @@ def move_slave_up(master, slaves, **kwargs):
         is_slv_up(slave_move)
         is_slv_up(slv_master)
         mysql_libs.disconnect(new_master, slv_master)
+        """
 
     return err_flag, err_msg
 

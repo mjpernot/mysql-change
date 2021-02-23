@@ -15,7 +15,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
-- move_slave:  Refactored function to remove multiple "return" commands.
+- move_slave_up, move_slave:  Refactored function to remove multiple "return" commands.
 - create_instances, move_slave_up, crt_slv_mst:  Added silent option to connect method.
 - move_slave, move_slave_up, run_program:  Replaced cmds_gen.disconnect call with mysql_libs.disconnect call.
 - move_slave_up, move_slave:  Replaced fetch_slv call with mysql_libs.fetch_slv call.
