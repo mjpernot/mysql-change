@@ -112,6 +112,8 @@ class SlaveRep(object):
         self.host = "HostName"
         self.port = 3306
         self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
 
 
 class UnitTest(unittest.TestCase):
