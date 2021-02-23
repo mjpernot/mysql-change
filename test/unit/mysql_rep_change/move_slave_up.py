@@ -84,7 +84,7 @@ class MasterRep(object):
 
         return True
 
-    def connect(self):
+    def connect(self, silent=False):
 
         """Method:  connect
 
@@ -94,7 +94,12 @@ class MasterRep(object):
 
         """
 
-        return True
+        status = True
+
+        if silent:
+            status = True
+
+        return status
 
 
 class SlaveRep(object):
@@ -133,7 +138,7 @@ class SlaveRep(object):
         self.conn = True
         self.conn_msg = None
 
-    def connect(self):
+    def connect(self, silent=False):
 
         """Method:  connect
 
@@ -143,7 +148,12 @@ class SlaveRep(object):
 
         """
 
-        return True
+        status = True
+
+        if silent:
+            status = True
+
+        return status
 
 
 class Cfg(object):
