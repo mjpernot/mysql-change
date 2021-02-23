@@ -152,7 +152,7 @@ class UnitTest(unittest.TestCase):
         self.new_mst = "NewMaster"
 
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
@@ -183,7 +183,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.mysql_libs.find_name",
                 mock.Mock(return_value="SlaveMaster"))
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
@@ -207,7 +207,7 @@ class UnitTest(unittest.TestCase):
                 self.master, self.slaves, args=self.args,
                 new_mst=self.new_mst), (False, None))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.fetch_slv",
                 mock.Mock(return_value=("SlaveMove", False, None)))
