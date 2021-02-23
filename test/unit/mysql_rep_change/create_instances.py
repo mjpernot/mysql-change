@@ -66,7 +66,7 @@ class MasterRep(object):
         self.port = 3306
         self.defaults_file = None
 
-    def connect(self):
+    def connect(self, silent=False):
 
         """Method:  connect
 
@@ -76,7 +76,12 @@ class MasterRep(object):
 
         """
 
-        return True
+        status = True
+
+        if silent:
+            status = True
+
+        return status
 
 
 class Cfg(object):
