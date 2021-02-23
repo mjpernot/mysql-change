@@ -479,19 +479,19 @@ def run_program(args_array, func_dict):
                 print(err_msg)
                 break
 
-        cmds_gen.disconnect(master, slaves)
+        mysql_libs.disconnect(master, slaves)
 
     else:
         print("Error:  Connection problem for master/slaves.")
         print("\tMaster:  %s" % (master.conn_msg))
 
         if master.conn:
-            cmds_gen.disconnect(master)
+            mysql_libs.disconnect(master)
 
         for slv in slaves:
             print("\tSlave:  %s" % (slv.conn_msg))
             if slv.conn:
-                cmds_gen.disconnect(slv)
+                mysql_libs.disconnect(slv)
 
 
 def main():
