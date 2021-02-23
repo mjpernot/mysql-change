@@ -441,7 +441,7 @@ def create_instances(args_array):
         defaults_file=cfg.cfg_file,
         extra_def_file=cfg.__dict__.get("extra_def_file", None),
         rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
-    master.connect()
+    master.connect(silent=True)
     slaves = []
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
