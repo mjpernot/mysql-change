@@ -319,7 +319,7 @@ def move_slave(master, slaves, **kwargs):
         master, slaves, new_master, slave_move, **kwargs)
 
     if err_flag:
-        cmds_gen.disconnect(new_master)
+        mysql_libs.disconnect(new_master)
         return err_flag, err_msg
 
     is_slv_up(slave_move)
@@ -332,7 +332,7 @@ def move_slave(master, slaves, **kwargs):
     else:
         is_slv_up(mysql_libs.find_name(slaves, kwargs.get("new_mst")))
 
-    cmds_gen.disconnect(new_master)
+    mysql_libs.disconnect(new_master)
 
     return err_flag, err_msg
 
