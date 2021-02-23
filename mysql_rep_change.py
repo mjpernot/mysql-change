@@ -373,13 +373,13 @@ def move_slave_up(master, slaves, **kwargs):
         defaults_file=cfg.cfg_file,
         extra_def_file=cfg.__dict__.get("extra_def_file", None),
         rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
-    new_master.connect()
+    new_master.connect(silent=True)
     slv_master = mysql_class.SlaveRep(
         master.name, master.server_id, master.sql_user, master.sql_pass,
         os_type=master.machine, host=master.host, port=master.port,
         defaults_file=master.defaults_file, rep_user=master.rep_user,
         rep_japd=master.rep_japd)
-    slv_master.connect()
+    slv_master.connect(silent=True)
 
     if new_master.conn_msg or slv_master.conn_msg:
         err_flag = True
