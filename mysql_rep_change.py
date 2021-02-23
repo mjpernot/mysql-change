@@ -298,41 +298,27 @@ def move_slave(master, slaves, **kwargs):
     slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
                                                          kwargs.get("slv_mv"))
 
-    if err_flag:
-        return err_flag, err_msg
+    if not err_flag:
+        new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
 
-    new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
+        if not err_flag:
+            err_flag, err_msg = mv_slv_to_new_mst(
+                master, slaves, new_master, slave_move, **kwargs)
 
-    if err_flag:
-        return err_flag, err_msg
+            if not err_flag:
+                is_slv_up(slave_move)
 
-    else:
-        # Set new master rep user information
-        #   Temporary fix until mysql_libs.create_slv_array allows for rep user
-        #       information.
-        #   NOTE:  This fix uses the existing master's rep user information and
-        #       not the rep user information in the slave config file.
-        new_master.rep_user = master.rep_user
-        new_master.rep_japd = master.rep_japd
+                if "-R" in args_array:
+                    slv_mst = mysql_libs.find_name(slaves,
+                                                   kwargs.get("new_mst"))
+                    mysql_libs.chg_slv_state([slv_mst], "stop")
+                    mysql_libs.reset_slave(slv_mst)
 
-    err_flag, err_msg = mv_slv_to_new_mst(
-        master, slaves, new_master, slave_move, **kwargs)
+                else:
+                    is_slv_up(mysql_libs.find_name(slaves,
+                                                   kwargs.get("new_mst")))
 
-    if err_flag:
-        mysql_libs.disconnect(new_master)
-        return err_flag, err_msg
-
-    is_slv_up(slave_move)
-
-    if "-R" in args_array:
-        slv_mst = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
-        mysql_libs.chg_slv_state([slv_mst], "stop")
-        mysql_libs.reset_slave(slv_mst)
-
-    else:
-        is_slv_up(mysql_libs.find_name(slaves, kwargs.get("new_mst")))
-
-    mysql_libs.disconnect(new_master)
+            mysql_libs.disconnect(new_master)
 
     return err_flag, err_msg
 

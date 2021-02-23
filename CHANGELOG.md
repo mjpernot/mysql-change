@@ -8,12 +8,14 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.0.0 library.
 
 ### Fixed
+- move_slave:  Fixed the problem where the slave now uses the replication user information from the configuration file.
 - mv_slv_to_new_mst:  Does not start slaves if sync fails on a database.
 - run_program:  Check for connection status of master and slaves before processing begins.
 - move_slave:  Set new MasterRep's instance rep user information to that of the existing MasterRep's instance.  Temporary fix until SlaveRep allows for rep user information.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- move_slave:  Refactored function to remove multiple "return" commands.
 - create_instances, move_slave_up, crt_slv_mst:  Added silent option to connect method.
 - move_slave, move_slave_up, run_program:  Replaced cmds_gen.disconnect call with mysql_libs.disconnect call.
 - move_slave_up, move_slave:  Replaced fetch_slv call with mysql_libs.fetch_slv call.
