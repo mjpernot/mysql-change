@@ -208,7 +208,7 @@ class UnitTest(unittest.TestCase):
         self.slave_list2 = [self.slave, self.slave2, self.slave3]
         self.slave_list3 = [self.slave, self.slave2, self.slave3, self.slave4]
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_no_master_slave_conn(self, mock_create):
@@ -227,7 +227,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_two_no_slave_conn(self, mock_create):
@@ -246,7 +246,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_one_no_slave_conn(self, mock_create):
@@ -265,7 +265,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_no_master_conn(self, mock_create):
@@ -284,7 +284,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_with_option_fails(self, mock_create):
@@ -303,7 +303,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_rep_change.run_program(self.args_array4,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_with_multiple_options(self, mock_create):
@@ -321,7 +321,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_rep_change.run_program(self.args_array3,
                                                       self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_with_option(self, mock_create):
@@ -339,7 +339,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                       self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.create_instances")
     def test_no_option(self, mock_create):
