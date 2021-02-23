@@ -213,7 +213,7 @@ def crt_slv_mst(slaves, **kwargs):
                 defaults_file=slv.defaults_file,
                 extra_def_file=slv.extra_def_file, rep_user=slv.rep_user,
                 rep_japd=slv.rep_japd)
-            new_master.connect()
+            new_master.connect(silent=True)
 
             if new_master.conn_msg:
                 err_flag = True
