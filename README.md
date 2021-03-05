@@ -72,7 +72,7 @@ Create MySQL configuration file and make the appropriate change to the environme
   * Change these entries in the MySQL setup:
     - user = "USER"
     - japd = "PSWORD"
-    - host = "SERVER_IP"
+    - host = "HOST_IP"
     - name = "HOST_NAME"
     - sid = SERVER_ID
     - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
