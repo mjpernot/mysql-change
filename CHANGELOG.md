@@ -4,19 +4,47 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.3] - 2020-11-18
+- Updated to use the mysql_libs v5.0.0 library.
+
+### Fixed
+- move_slave:  Fixed the problem where the slave now uses the replication user information from the configuration file.
+- mv_slv_to_new_mst:  Does not start slaves if sync fails on a database.
+- run_program:  Check for connection status of master and slaves before processing begins.
+- move_slave:  Set new MasterRep's instance rep user information to that of the existing MasterRep's instance.  Temporary fix until SlaveRep allows for rep user information.
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+
+### Changed
+- move_slave_up, move_slave:  Refactored function to remove multiple "return" commands.
+- create_instances, move_slave_up, crt_slv_mst:  Added silent option to connect method.
+- move_slave, move_slave_up, run_program:  Replaced cmds_gen.disconnect call with mysql_libs.disconnect call.
+- move_slave_up, move_slave:  Replaced fetch_slv call with mysql_libs.fetch_slv call.
+- crt_slv_mst:  Added master connection status checks.
+- move_slave_up:  Added new master and slave master connection status checks.
+- run_program:  Refactored check on master and slave connection status checks.
+- Removed unneccessary \*\*kwargs from arguments lists.
+- move_slave_up:  Added replication user to SlaveRep instance call.
+- crt_slv_mst:  Added replication user to MasteRep instance call.
+- move_slave_up:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
+- create_instances:  Replaced mysql_libs.create_instance with gen_libs.load_module and mysql_class.MasterRep instance call.
+- move_slave_up:  Changed arguments from positional to keywords for SlaveRep instance call.
+- crt_slv_mst:  Changed arguments from positional to keywords for MasterRep instance call.
+- config/mysql_cfg.py.TEMPLATE:  Changed entry to work with mysql_libs v5.0.0 library.
+- config/slave.txt.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
+- config/mysql_cfg.py.TEMPLATE:  Added rep_user and rep_japd entries to configuration file.
+- Documentation updates.
+
+### Removed
+- fetch_slv function
+
+
 ## [3.0.2] - 2020-04-24
 ### Added
 - Added ProgramLock class to prevent multiple runs at the same time.
 
 ### Fixed
 - move_slave_up:  Fixed disconnect from new master and slave/master.
-- fetch_slv:  Fixed problem with mutable default arguments issue.
-- crt_slv_mst:  Fixed problem with mutable default arguments issue.
-- mv_slv_to_new_mst:  Fixed problem with mutable default arguments issue.
-- move_slave:  Fixed problem with mutable default arguments issue.
-- move_slave_up:  Fixed problem with mutable default arguments issue.
-- create_instances:  Fixed problem with mutable default arguments issue.
-- run_program:  Fixed problem with mutable default arguments issue.
+- fetch_slv, crt_slv_mst, mv_slv_to_new_mst, move_slave, move_slave_up, create_instances, run_program:  Fixed problem with mutable default arguments issue.
 - crt_slv_mst:  Fixed naming conflict between arguments.
 - move_slave_up:  Setup connect to new master connection and to new slave master connection.
 - crt_slv_mst:  Setup connect to new master connection.
@@ -30,14 +58,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Added ProgramLock class to implement program locking.
 - config/slave.txt.TEMPLATE:  Changed format of file.
 - main:  Refactored the "if" statements to streamline the checks.
-- run_program:  Changed variables to standard naming convention.
-- create_instances:  Changed variables to standard naming convention.
-- move_slave_up:  Changed variables to standard naming convention.
-- move_slave:  Changed variables to standard naming convention.
-- mv_slv_to_new_mst:  Changed variables to standard naming convention.
-- crt_slv_mst:  Changed variables to standard naming convention.
-- fetch_slv:  Changed variables to standard naming convention.
-- is_slv_up:  Changed variables to standard naming convention.
+- run_program, create_instances, move_slave_up, move_slave, mv_slv_to_new_mst, crt_slv_mst, fetch_slv, is_slv_up:  Changed variables to standard naming convention.
 - Documentation updates.
 
 ### Removed
@@ -53,11 +74,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 Breaking Change
 
 ### Changed
-- Changed "mysql_class" calls to new naming schema.
-- Changed "mysql_libs" calls to new naming schema.
-- Changed "cmds_gen" calls to new naming schema.
-- Changed "gen_libs" calls to new naming schema.
-- Changed "arg_parser" calls to new naming schema.
+- mysql_class, mysql_libs, cmds_gen, gen_libs, arg_parser: Changed calls to new naming schema.
 - Changed function names from uppercase to lowercase.
 - Setup single-source version control.
 

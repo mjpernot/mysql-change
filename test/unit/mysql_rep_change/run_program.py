@@ -35,6 +35,82 @@ import version
 __version__ = version.__version__
 
 
+class MasterRep(object):
+
+    """Class:  MasterRep
+
+    Description:  Class stub holder for mysql_class.MasterRep class.
+
+    Methods:
+        __init__ -> Class initialization.
+        connect -> connect method.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "Master_Server_Name"
+        self.read_only = "OFF"
+        self.server_id = 10
+        self.sql_user = "User"
+        self.sql_pass = None
+        self.machine = "Linux"
+        self.host = "HostName"
+        self.port = 3306
+        self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
+        self.extra_def_file = "FileName"
+        self.conn = True
+        self.conn_msg = None
+
+
+class SlaveRep(object):
+
+    """Class:  SlaveRep
+
+    Description:  Class stub holder for mysql_class.SlaveRep class.
+
+    Methods:
+        __init__ -> Class initialization.
+        connect -> connect method.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.name = "Server_Name"
+        self.read_only = "OFF"
+        self.server_id = 10
+        self.sql_user = "User"
+        self.sql_pass = None
+        self.machine = "Linux"
+        self.host = "HostName"
+        self.port = 3306
+        self.defaults_file = None
+        self.rep_user = "RepUser"
+        self.rep_japd = None
+        self.extra_def_file = "FileName"
+        self.conn = True
+        self.conn_msg = None
+
+
 def move_slave(master, slave, **kwargs):
 
     """Function:  move_slave
@@ -87,7 +163,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_no_master -> Test with no master instance.
+        test_no_master_slave_conn -> Test with no master and slave connection.
+        test_two_no_slave_conn -> Test with two no slave connections.
+        test_one_no_slave_conn -> Test with one no slave connection.
+        test_no_master_conn -> Test with no master connection.
         test_with_option_fails -> Test with option failing.
         test_with_multiple_options -> Test with multiple options selected.
         test_with_option -> Test with option selected.
@@ -105,6 +184,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.err_msg = "Connection Error"
         self.args_array = {"-m": "master", "-n": "slaves"}
         self.args_array2 = {"-m": "master", "-n": "slaves", "-M": True}
         self.args_array3 = {"-m": "master", "-n": "slaves", "-M": True,
@@ -112,30 +192,102 @@ class UnitTest(unittest.TestCase):
         self.args_array4 = {"-m": "master", "-n": "slaves", "-S": True}
         self.func_dict = {"-M": move_slave, "-R": move_slave,
                           "-S": move_slave_up}
+        self.master = MasterRep()
+        self.master2 = MasterRep()
+        self.master2.conn = False
+        self.master2.conn_msg = self.err_msg
+        self.slave = SlaveRep()
+        self.slave2 = SlaveRep()
+        self.slave3 = SlaveRep()
+        self.slave3.conn = False
+        self.slave3.conn_msg = self.err_msg
+        self.slave4 = SlaveRep()
+        self.slave4.conn = False
+        self.slave4.conn_msg = self.err_msg
+        self.slave_list = [self.slave, self.slave2]
+        self.slave_list2 = [self.slave, self.slave2, self.slave3]
+        self.slave_list3 = [self.slave, self.slave2, self.slave3, self.slave4]
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances",
-                mock.Mock(return_value=(None, "Slave")))
-    def test_no_master(self):
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_no_master_slave_conn(self, mock_create):
 
-        """Function:  test_no_master
+        """Function:  test_no_master_slave_conn
 
-        Description:  Test with no master instance.
+        Description:  Test with no master and slave connection.
 
         Arguments:
 
         """
 
+        mock_create.return_value = (self.master2, self.slave_list2)
+
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array,
+            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances",
-                mock.Mock(return_value=("Master", "Slave")))
-    def test_with_option_fails(self):
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_two_no_slave_conn(self, mock_create):
+
+        """Function:  test_two_no_slave_conn
+
+        Description:  Test with two no slave connections.
+
+        Arguments:
+
+        """
+
+        mock_create.return_value = (self.master, self.slave_list3)
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
+                                                          self.func_dict))
+
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_one_no_slave_conn(self, mock_create):
+
+        """Function:  test_one_no_slave_conn
+
+        Description:  Test with one no slave connection.
+
+        Arguments:
+
+        """
+
+        mock_create.return_value = (self.master, self.slave_list2)
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
+                                                          self.func_dict))
+
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_no_master_conn(self, mock_create):
+
+        """Function:  test_no_master_conn
+
+        Description:  Test with no master connection.
+
+        Arguments:
+
+        """
+
+        mock_create.return_value = (self.master2, self.slave_list)
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
+                                                          self.func_dict))
+
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_with_option_fails(self, mock_create):
 
         """Function:  test_with_option_fails
 
@@ -145,15 +297,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_create.return_value = (self.master, self.slave_list)
+
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array4,
                                                           self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances",
-                mock.Mock(return_value=("Master", "Slave")))
-    def test_with_multiple_options(self):
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_with_multiple_options(self, mock_create):
 
         """Function:  test_with_multiple_options
 
@@ -163,14 +316,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_create.return_value = (self.master, self.slave_list)
+
         self.assertFalse(mysql_rep_change.run_program(self.args_array3,
                                                       self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances",
-                mock.Mock(return_value=("Master", "Slave")))
-    def test_with_option(self):
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_with_option(self, mock_create):
 
         """Function:  test_with_option
 
@@ -180,14 +334,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_create.return_value = (self.master, self.slave_list)
+
         self.assertFalse(mysql_rep_change.run_program(self.args_array2,
                                                       self.func_dict))
 
-    @mock.patch("mysql_rep_change.cmds_gen.disconnect",
+    @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.create_instances",
-                mock.Mock(return_value=("Master", "Slave")))
-    def test_no_option(self):
+    @mock.patch("mysql_rep_change.create_instances")
+    def test_no_option(self, mock_create):
 
         """Function:  test_no_option
 
@@ -196,6 +351,8 @@ class UnitTest(unittest.TestCase):
         Arguments:
 
         """
+
+        mock_create.return_value = (self.master, self.slave_list)
 
         self.assertFalse(mysql_rep_change.run_program(self.args_array,
                                                       self.func_dict))
