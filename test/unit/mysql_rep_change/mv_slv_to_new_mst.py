@@ -142,8 +142,6 @@ class UnitTest(unittest.TestCase):
         self.new_mst = "SlaveName"
         self.err_msg = "Error: Sync failed"
 
-    @mock.patch("mysql_rep_change.mysql_libs.chg_slv_state",
-                mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.mysql_libs.sync_rep_slv")
     @mock.patch("mysql_rep_change.mysql_libs.find_name")
     def test_sync_fails(self, mock_find, mock_sync):

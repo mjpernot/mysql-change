@@ -16,32 +16,40 @@
         files.  This must be done manually outside the scope of this program.
 
     Usage:
-        mysql_rep_change.py -c cfg_file -d path -s [path/]slave.txt
-            {-M -m master_name -n slave_name } |
-            {-R -m master_name -n slave_name } |
-            {-S -m new_master_cfg -n slave_name}
+        mysql_rep_change.py -c cfg_file -d path -s [path/]file
+            {-M -m new_master_name -n slave_name |
+             -R -m new_master_name -n slave_name |
+             -S -m new_master -n slave_name}
             [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c cfg_file => Current Master config file.  Is loaded as a python, do
             not include the .py extension with the name.  Required arg.
-        -s [path/]slave_file => Slave config file.  Will be a text file.
-            Include the file extension with the name.  Can include the path or
-            use the -d option path.  Required arg.
+        -s [path/]file => Slave config file.  Will be a text file.  Include the
+            file extension with the name.  Can include the path or use the -d
+            option path.  Required arg.
         -d dir path => Directory path to the config files. Required arg.
-        -M -> Move slave in a slave array to under another slave in the
-            same slave array.
-        -R -> Move slave in a slave array to under another slave in the
-            same slave array and remove the replication connection
-            between the current master and new master.
-        -S -> Take a slave that is under a slave/master and move it to
-            under the master that is hosting the slave/master
-            (Current Topology:  Master -> Slave1/Master -> Slave2)
-            (New Topology:  Master -> Slave1
-                            Master -> Slave2)
-        -m name => Name of the new master or new Master config file.
-        -n name => Name of a slave to be moved to the new master.
+
+        -M -> Move slave in a slave array to under another slave in the same
+                slave array.
+            -m new_master_name => Name of the new master from slave cfg file.
+            -n slave_name => Name of a slave to be moved to the new master.
+
+        -R -> Move slave in a slave array to under another slave in the same
+                slave array and remove the replication connection between the
+                current master and new master.
+            -m new_master_name => Name of the new master from slave cfg file.
+            -n slave_name => Name of a slave to be moved to the new master.
+
+        -S -> Take a slave that is under a slave/master and move it to under
+                the master that is hosting the slave/master
+                (Current Topology:  New_Master -> Slave1/Master -> Slave2)
+                (New Topology:  New_Master -> Slave1
+                                New_Master -> Slave2)
+            -m new_master => Name of the New_Master config file.
+            -n slave_name => Name of a slave to be moved to the New_Master.
+
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -55,11 +63,13 @@
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
-            # Configuration file for {Database Name/Server}
+            # Configuration file for Database Server.
             user = "USER"
-            passwd = "PASSWORD"
-            host = "IP_ADDRESS"
-            name = "HOSTNAME"
+            japd = "PSWORD"
+            rep_user = REP_USER
+            rep_japd = REP_PSWORD
+            host = "HOST_IP"
+            name = "HOST_NAME"
             sid = SERVER_ID
             extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
             serv_os = "Linux"
@@ -68,6 +78,7 @@
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
@@ -80,10 +91,11 @@
         Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
             password="PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            socket="DIRECTORY_PATH/mysqld.sock"
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+
         NOTE 2:  The --defaults-extra-file option will be overridden if there
             is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
             of the user running this program.  The extras file will in effect
@@ -92,19 +104,22 @@
         Slave configuration file format (config/slave.txt.TEMPLATE)
             # Slave configuration
             user = USER
-            passwd = PASSWORD
-            host = IP_ADDRESS
-            name = HOSTNAME
+            japd = PSWORD
+            rep_user = REP_USER
+            rep_japd = REP_PSWORD
+            host = HOST_IP
+            name = HOST_NAME
             sid = SERVER_ID
             cfg_file = None
             port = 3306
             serv_os = Linux
+            extra_def_file = DIRECTORY_PATH/mysql.cfg
 
         NOTE:  Create a Slave configration section for each slave.
 
     Example:
         mysql_rep_change.py -c master -d config -s slaves.txt -M
-            -m new_master_name -n slave_name
+            -m new_master -n slave_name
 
 """
 
@@ -118,6 +133,7 @@ import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
+import lib.machine as machine
 import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class
 import version
@@ -139,7 +155,7 @@ def help_message():
     print(__doc__)
 
 
-def is_slv_up(slv, **kwargs):
+def is_slv_up(slv):
 
     """Function:  is_slv_up
 
@@ -157,36 +173,6 @@ def is_slv_up(slv, **kwargs):
         if slv.is_slv_error():
             print("IO Error:  {0}:  {1}".format(slv.io_err, slv.io_msg))
             print("SQL Error:  {0}:  {1}".format(slv.sql_err, slv.sql_msg))
-
-
-def fetch_slv(slaves, **kwargs):
-
-    """Function:  fetch_slv
-
-    Description:  Locates a slave in the slave array.
-
-    Arguments:
-        (input) slaves -> Slave instance array.
-        (input) **kwargs:
-            slv_mv -> Name of slave to be moved to new master.
-        (output) SLV -> Class instance of slave.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
-
-    """
-
-    slaves = list(slaves)
-    err_flag = False
-    err_msg = None
-    slv = None
-    slv = mysql_libs.find_name(slaves, kwargs.get("slv_mv"))
-
-    if not slv:
-        err_flag = True
-        err_msg = "Error:  Slave %s was not found in slave array." \
-                  % (kwargs.get("slv_mv"))
-
-    return slv, err_flag, err_msg
 
 
 def crt_slv_mst(slaves, **kwargs):
@@ -223,8 +209,17 @@ def crt_slv_mst(slaves, **kwargs):
         else:
             new_master = mysql_class.MasterRep(
                 slv.name, slv.server_id, slv.sql_user, slv.sql_pass,
-                slv.machine, slv.host, slv.port, slv.defaults_file)
-            new_master.connect()
+                os_type=slv.machine, host=slv.host, port=slv.port,
+                defaults_file=slv.defaults_file,
+                extra_def_file=slv.extra_def_file, rep_user=slv.rep_user,
+                rep_japd=slv.rep_japd)
+            new_master.connect(silent=True)
+
+            if new_master.conn_msg:
+                err_flag = True
+                err_msg = "Detected problem in new master connection"
+                print("Error:  Connection problem for new master.")
+                print("\tNew Master:  %s" % (new_master.conn_msg))
 
     else:
         err_flag = True
@@ -264,15 +259,15 @@ def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):
         if err_flag:
             break
 
-    # If the loop completes, then "Change Master To" can be ran.
+    # Only run if loop completes without error.
     else:
         # Get latest log position.
         new_master.upd_mst_status()
         mysql_libs.change_master_to(new_master, slave_move)
 
-    mysql_libs.chg_slv_state(
-        [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slave_move],
-        "start")
+        mysql_libs.chg_slv_state(
+            [mysql_libs.find_name(slaves, kwargs.get("new_mst")), slave_move],
+            "start")
 
     return err_flag, err_msg
 
@@ -300,34 +295,30 @@ def move_slave(master, slaves, **kwargs):
 
     args_array = dict(kwargs.get("args"))
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
+                                                         kwargs.get("slv_mv"))
 
-    if err_flag:
-        return err_flag, err_msg
+    if not err_flag:
+        new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
 
-    new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
+        if not err_flag:
+            err_flag, err_msg = mv_slv_to_new_mst(
+                master, slaves, new_master, slave_move, **kwargs)
 
-    if err_flag:
-        return err_flag, err_msg
+            if not err_flag:
+                is_slv_up(slave_move)
 
-    err_flag, err_msg = mv_slv_to_new_mst(
-        master, slaves, new_master, slave_move, **kwargs)
+                if "-R" in args_array:
+                    slv_mst = mysql_libs.find_name(slaves,
+                                                   kwargs.get("new_mst"))
+                    mysql_libs.chg_slv_state([slv_mst], "stop")
+                    mysql_libs.reset_slave(slv_mst)
 
-    if err_flag:
-        cmds_gen.disconnect(new_master)
-        return err_flag, err_msg
+                else:
+                    is_slv_up(mysql_libs.find_name(slaves,
+                                                   kwargs.get("new_mst")))
 
-    is_slv_up(slave_move)
-
-    if "-R" in args_array:
-        slv_mst = mysql_libs.find_name(slaves, kwargs.get("new_mst"))
-        mysql_libs.chg_slv_state([slv_mst], "stop")
-        mysql_libs.reset_slave(slv_mst)
-
-    else:
-        is_slv_up(mysql_libs.find_name(slaves, kwargs.get("new_mst")))
-
-    cmds_gen.disconnect(new_master)
+            mysql_libs.disconnect(new_master)
 
     return err_flag, err_msg
 
@@ -355,44 +346,60 @@ def move_slave_up(master, slaves, **kwargs):
 
     args_array = dict(kwargs.get("args"))
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = fetch_slv(slaves, **kwargs)
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
+                                                         kwargs.get("slv_mv"))
 
     if err_flag:
         return err_flag, err_msg
 
-    new_master = mysql_libs.create_instance(
-        kwargs.get("new_mst"), args_array["-d"], mysql_class.MasterRep)
-    new_master.connect()
-
+    cfg = gen_libs.load_module(kwargs.get("new_mst"), args_array["-d"])
+    new_master = mysql_class.MasterRep(
+        cfg.name, cfg.sid, cfg.user, cfg.japd,
+        os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
+        defaults_file=cfg.cfg_file,
+        extra_def_file=cfg.__dict__.get("extra_def_file", None),
+        rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
+    new_master.connect(silent=True)
     slv_master = mysql_class.SlaveRep(
         master.name, master.server_id, master.sql_user, master.sql_pass,
-        master.machine, master.host, master.port, master.defaults_file)
-    slv_master.connect()
+        os_type=master.machine, host=master.host, port=master.port,
+        defaults_file=master.defaults_file, rep_user=master.rep_user,
+        rep_japd=master.rep_japd)
+    slv_master.connect(silent=True)
 
-    err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
+    if new_master.conn_msg or slv_master.conn_msg:
+        err_flag = True
+        err_msg = "Detected problem in one of the connections"
 
-    if err_flag:
-        cmds_gen.disconnect(new_master, slv_master)
-        return err_flag, err_msg
+        print("Error:  Connection problem for new master/slave master.")
+        print("\tNew Master:  %s" % (new_master.conn_msg))
+        print("\tSlave Master:  %s" % (slv_master.conn_msg))
 
-    err_flag, err_msg = \
-        mysql_libs.sync_rep_slv(
-            master, mysql_libs.find_name(slaves, kwargs.get("slv_mv")))
+        if new_master.conn:
+            mysql_libs.disconnect(new_master)
 
-    if err_flag:
-        cmds_gen.disconnect(new_master, slv_master)
-        return err_flag, err_msg
+        if slv_master.conn:
+            mysql_libs.disconnect(slv_master)
 
-    mysql_libs.change_master_to(new_master, slave_move)
-    mysql_libs.chg_slv_state([slave_move, slv_master], "start")
-    is_slv_up(slave_move)
-    is_slv_up(slv_master)
-    cmds_gen.disconnect(new_master, slv_master)
+    else:
+        err_flag, err_msg = mysql_libs.sync_rep_slv(new_master, slv_master)
+
+        if not err_flag:
+            err_flag, err_msg = mysql_libs.sync_rep_slv(
+                master, mysql_libs.find_name(slaves, kwargs.get("slv_mv")))
+
+            if not err_flag:
+                mysql_libs.change_master_to(new_master, slave_move)
+                mysql_libs.chg_slv_state([slave_move, slv_master], "start")
+                is_slv_up(slave_move)
+                is_slv_up(slv_master)
+
+        mysql_libs.disconnect(new_master, slv_master)
 
     return err_flag, err_msg
 
 
-def create_instances(args_array, **kwargs):
+def create_instances(args_array):
 
     """Function:  create_instances
 
@@ -401,15 +408,20 @@ def create_instances(args_array, **kwargs):
 
     Arguments:
         (input) args_array -> Array of command line options and values.
-        (output) MASTER -> Master instance.
-        (output) SLAVE -> Slave instance array.
+        (output) master -> Master instance.
+        (output) slave -> Slave instance list.
 
     """
 
     args_array = dict(args_array)
-    master = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.MasterRep)
-    master.connect()
+    cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    master = mysql_class.MasterRep(
+        cfg.name, cfg.sid, cfg.user, cfg.japd,
+        os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
+        defaults_file=cfg.cfg_file,
+        extra_def_file=cfg.__dict__.get("extra_def_file", None),
+        rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
+    master.connect(silent=True)
     slaves = []
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
@@ -418,7 +430,7 @@ def create_instances(args_array, **kwargs):
     return master, slaves
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args_array, func_dict):
 
     """Function:  run_program
 
@@ -434,7 +446,8 @@ def run_program(args_array, func_dict, **kwargs):
     func_dict = dict(func_dict)
     master, slaves = create_instances(args_array)
 
-    if master and slaves:
+    if slaves and not master.conn_msg \
+       and not [False for item in slaves if item.conn_msg]:
 
         # Intersect args_array and func_dict to call function.
         for item in set(args_array.keys()) & set(func_dict.keys()):
@@ -446,11 +459,19 @@ def run_program(args_array, func_dict, **kwargs):
                 print(err_msg)
                 break
 
-        cmds_gen.disconnect(master, slaves)
+        mysql_libs.disconnect(master, slaves)
 
     else:
-        cmds_gen.disconnect(master, slaves)
-        print("Error:  Master and/or Slaves instances not created.")
+        print("Error:  Connection problem for master/slaves.")
+        print("\tMaster:  %s" % (master.conn_msg))
+
+        if master.conn:
+            mysql_libs.disconnect(master)
+
+        for slv in slaves:
+            print("\tSlave:  %s" % (slv.conn_msg))
+            if slv.conn:
+                mysql_libs.disconnect(slv)
 
 
 def main():
