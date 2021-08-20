@@ -95,8 +95,9 @@ chmod 600 mysql_cfg.py
 
 Create MySQL definition file and make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
+  * Note:  socket use is only required to be set in certain conditions when connecting using localhost.
     - password="PASSWORD"
-    - socket="DIRECTORY_PATH/mysqld.sock"
+    - socket=DIRECTORY_PATH/mysqld.sock
 
 ```
 cp mysql.cfg.TEMPLATE mysql.cfg
