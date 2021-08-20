@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.2.2 library.
 
 ### Changed
+- config/slave.txt.TEMPLATE:  Added SSL confioguration options.
 - config/mysql_cfg.py.TEMPLATE:  Added SSL configuration options.
 - config/mysql.cfg.TEMPLATE:  Pointed to correct socket file.
 
