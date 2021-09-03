@@ -8,10 +8,16 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to work in MySQL 8.0 and 5.7 environments.
 - Updated to work in a SSL environment.
 - Updated to use the mysql_libs v5.2.2 library.
+- Updated to use gen_libs v2.8.4 library.
 
 ### Changed
+- create_instances:  Receive slv_key argument and call gen_libs.transpose_dict function.
+- run_program:  Add \*\*kwargs to parameter list and pass to create_instances call.
+- main:  Setup slv_key dictionary.
 - config/slave.txt.TEMPLATE:  Added SSL confioguration options.
 - config/mysql_cfg.py.TEMPLATE:  Added SSL configuration options.
+
+### Fixed
 - config/mysql.cfg.TEMPLATE:  Pointed to correct socket file.
 
 
