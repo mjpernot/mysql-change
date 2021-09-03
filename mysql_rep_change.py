@@ -443,7 +443,7 @@ def create_instances(args_array):
     return master, slaves
 
 
-def run_program(args_array, func_dict):
+def run_program(args_array, func_dict, **kwargs):
 
     """Function:  run_program
 
@@ -452,6 +452,8 @@ def run_program(args_array, func_dict):
     Arguments:
         (input) args_array -> Array of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
+        (input) kwargs:
+            slv_key -> Dictionary of keys and data types.
 
     """
 
@@ -466,7 +468,7 @@ def run_program(args_array, func_dict):
         for item in set(args_array.keys()) & set(func_dict.keys()):
             err_flag, err_msg = func_dict[item](
                 master, slaves, new_mst=args_array["-m"],
-                slv_mv=args_array["-n"], args=args_array)
+                slv_mv=args_array["-n"], args=args_array, **kwargs)
 
             if err_flag:
                 print(err_msg)

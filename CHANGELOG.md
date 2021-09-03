@@ -11,9 +11,12 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use gen_libs v2.8.4 library.
 
 ### Changed
+- run_program:  Add \*\*kwargs to parameter list and pass to function calls.
 - main:  Setup slv_key dictionary.
 - config/slave.txt.TEMPLATE:  Added SSL confioguration options.
 - config/mysql_cfg.py.TEMPLATE:  Added SSL configuration options.
+
+### Fixed
 - config/mysql.cfg.TEMPLATE:  Pointed to correct socket file.
 
 
