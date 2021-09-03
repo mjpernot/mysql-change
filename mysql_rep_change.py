@@ -144,7 +144,6 @@ import sys
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
-import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
 import lib.machine as machine
 import mysql_lib.mysql_libs as mysql_libs
@@ -438,7 +437,7 @@ def create_instances(args_array, **kwargs):
         rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
     master.connect(silent=True)
     slaves = []
-    slv_array = cmds_gen.create_cfg_array(args_array["-s"],
+    slv_array = gen_libs.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
     slv_array = gen_libs.transpose_dict(slv_array, kwargs.get("slv_key", {}))
     slaves = mysql_libs.create_slv_array(slv_array)

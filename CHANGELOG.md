@@ -11,7 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use gen_libs v2.8.4 library.
 
 ### Changed
-- create_instances:  Receive slv_key argument and call gen_libs.transpose_dict function.
+- create_instances:  Receive slv_key argument and call gen_libs.transpose_dict function and changed cmds_gen to gen_libs.
 - run_program:  Add \*\*kwargs to parameter list and pass to create_instances call.
 - main:  Setup slv_key dictionary.
 - config/slave.txt.TEMPLATE:  Added SSL confioguration options.
@@ -19,6 +19,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Fixed
 - config/mysql.cfg.TEMPLATE:  Pointed to correct socket file.
+
+### Removed
+- cmds_gen module.
 
 
 ## [3.0.3] - 2020-11-18
