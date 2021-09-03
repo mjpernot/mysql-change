@@ -58,8 +58,8 @@
         NOTE 2:  -M, -R, and -S are XOR arguments.
         NOTE 3:  -M and -R options:  The name for -m option is the server_name
             entry from the slave configuration file.
-        NOTE 4:  -S option:  The -m is a master configuration file name
-            (minus .py extension).
+        NOTE 4:  -S option:  The -m is a master configuration file name (minus
+            .py extension).
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
