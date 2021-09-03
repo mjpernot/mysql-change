@@ -459,7 +459,7 @@ def run_program(args_array, func_dict, **kwargs):
 
     args_array = dict(args_array)
     func_dict = dict(func_dict)
-    master, slaves = create_instances(args_array)
+    master, slaves = create_instances(args_array, **kwargs)
 
     if slaves and not master.conn_msg \
        and not [False for item in slaves if item.conn_msg]:
@@ -468,7 +468,7 @@ def run_program(args_array, func_dict, **kwargs):
         for item in set(args_array.keys()) & set(func_dict.keys()):
             err_flag, err_msg = func_dict[item](
                 master, slaves, new_mst=args_array["-m"],
-                slv_mv=args_array["-n"], args=args_array, **kwargs)
+                slv_mv=args_array["-n"], args=args_array)
 
             if err_flag:
                 print(err_msg)
