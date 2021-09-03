@@ -146,7 +146,7 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.mysql_libs.create_slv_array",
                 mock.Mock(return_value="SlaveArray"))
-    @mock.patch("mysql_rep_change.cmds_gen.create_cfg_array",
+    @mock.patch("mysql_rep_change.gen_libs.create_cfg_array",
                 mock.Mock(return_value=[]))
     @mock.patch("mysql_rep_change.gen_libs.transpose_dict")
     @mock.patch("mysql_rep_change.gen_libs.load_module")
