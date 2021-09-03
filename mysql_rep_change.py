@@ -412,7 +412,7 @@ def move_slave_up(master, slaves, **kwargs):
     return err_flag, err_msg
 
 
-def create_instances(args_array):
+def create_instances(args_array, **kwargs):
 
     """Function:  create_instances
 
@@ -421,6 +421,8 @@ def create_instances(args_array):
 
     Arguments:
         (input) args_array -> Array of command line options and values.
+        (input) kwargs:
+            slv_key -> Dictionary of keys and data types.
         (output) master -> Master instance.
         (output) slave -> Slave instance list.
 
@@ -438,6 +440,7 @@ def create_instances(args_array):
     slaves = []
     slv_array = cmds_gen.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
+    slv_array = gen_libs.transpose_dict(slv_array, kwargs.get("slv_key", {}))
     slaves = mysql_libs.create_slv_array(slv_array)
 
     return master, slaves
