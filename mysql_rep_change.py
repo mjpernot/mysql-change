@@ -501,6 +501,7 @@ def main():
         opt_req_list -> contains the options that are required for the program.
         opt_val_list -> contains options which require values.
         opt_xor_dict -> contains dict with key that is xor with it's values.
+        slv_key -> contains dict with keys to be converted to data types.
 
     Arguments:
         (input) argv -> Arguments from the command line.
@@ -515,6 +516,11 @@ def main():
     opt_req_list = ["-c", "-d", "-s"]
     opt_val_list = ["-c", "-d", "-m", "-n", "-s", "-y"]
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
+    slv_key = {"sid": "int", "port": "int", "cfg_file": "None",
+               "ssl_client_ca": "None", "ssl_ca_path": "None",
+               "ssl_client_key": "None", "ssl_client_cert": "None",
+               "ssl_client_flag": "int", "ssl_disabled": "bool",
+               "ssl_verify_id": "bool", "ssl_verify_cert": "bool"}
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
@@ -528,7 +534,7 @@ def main():
         try:
             proglock = gen_class.ProgramLock(cmdline.argv,
                                              args_array.get("-y", ""))
-            run_program(args_array, func_dict)
+            run_program(args_array, func_dict, slv_key=slv_key)
             del proglock
 
         except gen_class.SingleInstanceException:
