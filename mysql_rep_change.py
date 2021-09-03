@@ -95,8 +95,9 @@
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
-
-        NOTE 2:  The --defaults-extra-file option will be overridden if there
+        NOTE 2:  Socket use is only required to be set in certain conditions
+            when connecting using localhost.
+        NOTE 3:  The --defaults-extra-file option will be overridden if there
             is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
             of the user running this program.  The extras file will in effect
             be ignored.
