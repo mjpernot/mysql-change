@@ -42,8 +42,8 @@ class MasterRep(object):
     Description:  Class stub holder for mysql_class.MasterRep class.
 
     Methods:
-        __init__ -> Class initialization.
-        connect -> connect method.
+        __init__
+        connect
 
     """
 
@@ -80,8 +80,8 @@ class SlaveRep(object):
     Description:  Class stub holder for mysql_class.SlaveRep class.
 
     Methods:
-        __init__ -> Class initialization.
-        connect -> connect method.
+        __init__
+        connect
 
     """
 
@@ -162,15 +162,15 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_no_master_slave_conn -> Test with no master and slave connection.
-        test_two_no_slave_conn -> Test with two no slave connections.
-        test_one_no_slave_conn -> Test with one no slave connection.
-        test_no_master_conn -> Test with no master connection.
-        test_with_option_fails -> Test with option failing.
-        test_with_multiple_options -> Test with multiple options selected.
-        test_with_option -> Test with option selected.
-        test_no_option -> Test with no option selected.
+        setUp
+        test_no_master_slave_conn
+        test_two_no_slave_conn
+        test_one_no_slave_conn
+        test_no_master_conn
+        test_with_option_fails
+        test_with_multiple_options
+        test_with_option
+        test_no_option
 
     """
 

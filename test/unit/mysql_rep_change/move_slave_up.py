@@ -42,9 +42,9 @@ class MasterRep(object):
     Description:  Class stub holder for mysql_class.MasterRep class.
 
     Methods:
-        __init__ -> Class initialization.
-        upd_mst_status -> upd_mst_status method.
-        connect -> connect method.
+        __init__
+        upd_mst_status
+        connect
 
     """
 
@@ -109,8 +109,8 @@ class SlaveRep(object):
     Description:  Class stub holder for mysql_class.SlaveRep class.
 
     Methods:
-        __init__ -> Class initialization.
-        connect -> connect method.
+        __init__
+        connect
 
     """
 
@@ -163,7 +163,7 @@ class Cfg(object):
     Description:  Stub holder for configuration file.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -196,14 +196,14 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_no_slave_new_master -> Test with no new & slave master connection.
-        test_no_slave_master -> Test with no slave master connection fails.
-        test_no_new_master -> Test with no new master connection fails.
-        test_slave_moved -> Test with slave moved up.
-        test_find_slave_fails -> Test with find of slave fails.
-        test_sync_slave_fails -> Test with sync up of slave fails.
-        test_fetch_slv_fails -> Test with fetching slave fails.
+        setUp
+        test_no_slave_new_master
+        test_no_slave_master
+        test_no_new_master
+        test_slave_moved
+        test_find_slave_fails
+        test_sync_slave_fails
+        test_fetch_slv_fails
 
     """
 
