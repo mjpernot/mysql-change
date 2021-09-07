@@ -58,8 +58,8 @@
         NOTE 2:  -M, -R, and -S are XOR arguments.
         NOTE 3:  -M and -R options:  The name for -m option is the server_name
             entry from the slave configuration file.
-        NOTE 4:  -S option:  The -m is a master configuration file name
-            (minus .py extension).
+        NOTE 4:  -S option:  The -m is a master configuration file name (minus
+            .py extension).
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
@@ -76,9 +76,21 @@
             port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
 
+            # If SSL connections are being used, configure one or more of these
+                entries:
+            ssl_client_ca = None
+            ssl_client_key = None
+            ssl_client_cert = None
+
+            # Only changes these if necessary and have knowledge in MySQL
+                SSL configuration setup:
+            ssl_client_flag = None
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
-
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
@@ -95,8 +107,9 @@
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
-
-        NOTE 2:  The --defaults-extra-file option will be overridden if there
+        NOTE 2:  Socket use is only required to be set in certain conditions
+            when connecting using localhost.
+        NOTE 3:  The --defaults-extra-file option will be overridden if there
             is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
             of the user running this program.  The extras file will in effect
             be ignored.
@@ -131,7 +144,6 @@ import sys
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
-import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
 import lib.machine as machine
 import mysql_lib.mysql_libs as mysql_libs
@@ -399,7 +411,7 @@ def move_slave_up(master, slaves, **kwargs):
     return err_flag, err_msg
 
 
-def create_instances(args_array):
+def create_instances(args_array, **kwargs):
 
     """Function:  create_instances
 
@@ -408,6 +420,8 @@ def create_instances(args_array):
 
     Arguments:
         (input) args_array -> Array of command line options and values.
+        (input) kwargs:
+            slv_key -> Dictionary of keys and data types.
         (output) master -> Master instance.
         (output) slave -> Slave instance list.
 
@@ -423,14 +437,15 @@ def create_instances(args_array):
         rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
     master.connect(silent=True)
     slaves = []
-    slv_array = cmds_gen.create_cfg_array(args_array["-s"],
+    slv_array = gen_libs.create_cfg_array(args_array["-s"],
                                           cfg_path=args_array["-d"])
+    slv_array = gen_libs.transpose_dict(slv_array, kwargs.get("slv_key", {}))
     slaves = mysql_libs.create_slv_array(slv_array)
 
     return master, slaves
 
 
-def run_program(args_array, func_dict):
+def run_program(args_array, func_dict, **kwargs):
 
     """Function:  run_program
 
@@ -439,12 +454,14 @@ def run_program(args_array, func_dict):
     Arguments:
         (input) args_array -> Array of command line options and values.
         (input) func_dict -> Dictionary list of functions and options.
+        (input) kwargs:
+            slv_key -> Dictionary of keys and data types.
 
     """
 
     args_array = dict(args_array)
     func_dict = dict(func_dict)
-    master, slaves = create_instances(args_array)
+    master, slaves = create_instances(args_array, **kwargs)
 
     if slaves and not master.conn_msg \
        and not [False for item in slaves if item.conn_msg]:
@@ -488,6 +505,7 @@ def main():
         opt_req_list -> contains the options that are required for the program.
         opt_val_list -> contains options which require values.
         opt_xor_dict -> contains dict with key that is xor with it's values.
+        slv_key -> contains dict with keys to be converted to data types.
 
     Arguments:
         (input) argv -> Arguments from the command line.
@@ -502,6 +520,11 @@ def main():
     opt_req_list = ["-c", "-d", "-s"]
     opt_val_list = ["-c", "-d", "-m", "-n", "-s", "-y"]
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
+    slv_key = {"sid": "int", "port": "int", "cfg_file": "None",
+               "ssl_client_ca": "None", "ssl_ca_path": "None",
+               "ssl_client_key": "None", "ssl_client_cert": "None",
+               "ssl_client_flag": "int", "ssl_disabled": "bool",
+               "ssl_verify_id": "bool", "ssl_verify_cert": "bool"}
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
@@ -515,7 +538,7 @@ def main():
         try:
             proglock = gen_class.ProgramLock(cmdline.argv,
                                              args_array.get("-y", ""))
-            run_program(args_array, func_dict)
+            run_program(args_array, func_dict, slv_key=slv_key)
             del proglock
 
         except gen_class.SingleInstanceException:

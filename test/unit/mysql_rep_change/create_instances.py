@@ -41,8 +41,8 @@ class MasterRep(object):
     Description:  Class stub holder for mysql_class.MasterRep class.
 
     Methods:
-        __init__ -> Class initialization.
-        connect -> connect method.
+        __init__
+        connect
 
     """
 
@@ -91,7 +91,7 @@ class Cfg(object):
     Description:  Stub holder for configuration file.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -124,8 +124,8 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_create_instances -> Test create_instances function.
+        setUp
+        test_create_instances
 
     """
 
@@ -146,11 +146,12 @@ class UnitTest(unittest.TestCase):
 
     @mock.patch("mysql_rep_change.mysql_libs.create_slv_array",
                 mock.Mock(return_value="SlaveArray"))
-    @mock.patch("mysql_rep_change.cmds_gen.create_cfg_array",
+    @mock.patch("mysql_rep_change.gen_libs.create_cfg_array",
                 mock.Mock(return_value=[]))
+    @mock.patch("mysql_rep_change.gen_libs.transpose_dict")
     @mock.patch("mysql_rep_change.gen_libs.load_module")
     @mock.patch("mysql_rep_change.mysql_class.MasterRep")
-    def test_create_instances(self, mock_inst, mock_cfg):
+    def test_create_instances(self, mock_inst, mock_cfg, mock_trans):
 
         """Function:  test_create_instances
 
@@ -162,6 +163,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.master
         mock_cfg.return_value = self.cfg
+        mock_trans.return_value = []
 
         master, slaves = mysql_rep_change.create_instances(self.args_array)
 
