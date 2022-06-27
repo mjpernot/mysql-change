@@ -5,6 +5,14 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.1] - 2022-06-27
+- Upgraded python-lib to v2.9.2
+- Upgraded mysql-lib to v5.3.1
+- Added TLS capability
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE: Added TLS entry.
+- config/slave.txt.TEMPLATE: Added TLS entry.
+- Documentation updates.
 
 
 ## [3.1.0] - 2021-08-20
