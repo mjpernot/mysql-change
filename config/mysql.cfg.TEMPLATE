@@ -1,7 +1,7 @@
 # Classification (U)
 # Unclassified until filled in.
 [client]
-password="PASSWORD"
+password="PSWORD"
 # Location of the MySQL socket file.
 # Example:  socket=/opt/lamp/mysql/tmp/mysqld.sock
 socket=DIRECTORY_PATH/mysqld.sock

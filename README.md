@@ -56,7 +56,7 @@ Install supporting classes and libraries.
 ```
 pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
 pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
+pip install -r requirements-mysql-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
 ```
 
 # Configuration:
@@ -86,6 +86,9 @@ Create MySQL configuration file and make the appropriate change to the environme
     - ssl_verify_id = False
     - ssl_verify_cert = False
 
+  * TLS version: Set what TLS versions are allowed in the connection set up.
+    - tls_versions = []
+
 ```
 cd config
 cp mysql_cfg.py.TEMPLATE mysql_cfg.py
@@ -96,7 +99,7 @@ chmod 600 mysql_cfg.py
 Create MySQL definition file and make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
   * Note:  socket use is only required to be set in certain conditions when connecting using localhost.
-    - password="PASSWORD"
+    - password="PSWORD"
     - socket=DIRECTORY_PATH/mysqld.sock
 
 ```
@@ -131,6 +134,9 @@ Create a MySQL slave configuration file and make the appropriate change to the e
     - ssl_disabled = False
     - ssl_verify_id = False
     - ssl_verify_cert = False
+
+  * TLS version: Set what TLS versions are allowed in the connection set up.
+    - tls_versions = []
 
   * NOTE:  Create a new set of entries for each slave in the MySQL replica set.
 

@@ -16,7 +16,7 @@
         files.  This must be done manually outside the scope of this program.
 
     Usage:
-        mysql_rep_change.py -c cfg_file -d path -s [path/]file
+        mysql_rep_change.py -c mysql_cfg -d path -s [path/]file
             {-M -m new_master_name -n slave_name |
              -R -m new_master_name -n slave_name |
              -S -m new_master -n slave_name}
@@ -24,7 +24,7 @@
             [-v | -h]
 
     Arguments:
-        -c cfg_file => Current Master config file.  Is loaded as a python, do
+        -c mysql_cfg => Current Master config file.  Is loaded as a python, do
             not include the .py extension with the name.  Required arg.
         -s [path/]file => Slave config file.  Will be a text file.  Include the
             file extension with the name.  Can include the path or use the -d
@@ -89,6 +89,9 @@
             ssl_verify_id = False
             ssl_verify_cert = False
 
+            # Set what TLS versions are allowed in the connection set up:
+            tls_versions = []
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
@@ -102,7 +105,7 @@
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
-            password="PASSWORD"
+            password="PSWORD"
             socket="DIRECTORY_PATH/mysqld.sock"
 
         NOTE 1:  The socket information can be obtained from the my.cnf
@@ -127,6 +130,22 @@
             port = 3306
             serv_os = Linux
             extra_def_file = DIRECTORY_PATH/mysql.cfg
+
+            # If SSL connections are being used, configure one or more of these
+                entries:
+            ssl_client_ca = None
+            ssl_client_key = None
+            ssl_client_cert = None
+
+            # Only changes these if necessary and have knowledge in MySQL
+                SSL configuration setup:
+            ssl_client_flag = None
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
+
+            # Set what TLS versions are allowed in the connection set up:
+            tls_versions = []
 
         NOTE:  Create a Slave configration section for each slave.
 
