@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  run_program.py
@@ -17,13 +16,7 @@
 # Standard
 import sys
 import os
-
-if sys.version_info < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
-
-# Third-party
+import unittest
 import mock
 
 # Local
@@ -190,8 +183,8 @@ class UnitTest(unittest.TestCase):
         self.args_array3 = {"-m": "master", "-n": "slaves", "-M": True,
                             "-R": True}
         self.args_array4 = {"-m": "master", "-n": "slaves", "-S": True}
-        self.func_dict = {"-M": move_slave, "-R": move_slave,
-                          "-S": move_slave_up}
+        self.func_names = {"-M": move_slave, "-R": move_slave,
+                           "-S": move_slave_up}
         self.master = MasterRep()
         self.master2 = MasterRep()
         self.master2.conn = False
@@ -225,7 +218,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_dict))
+                                                          self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -244,7 +237,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_dict))
+                                                          self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -263,7 +256,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_dict))
+                                                          self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -282,7 +275,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_dict))
+                                                          self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -301,7 +294,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_rep_change.run_program(self.args_array4,
-                                                          self.func_dict))
+                                                          self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -319,7 +312,7 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list)
 
         self.assertFalse(mysql_rep_change.run_program(self.args_array3,
-                                                      self.func_dict))
+                                                      self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -337,7 +330,7 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list)
 
         self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                      self.func_dict))
+                                                      self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -355,7 +348,7 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list)
 
         self.assertFalse(mysql_rep_change.run_program(self.args_array,
-                                                      self.func_dict))
+                                                      self.func_names))
 
 
 if __name__ == "__main__":

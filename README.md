@@ -7,7 +7,6 @@
 
 ###  This README file is broken down into the following sections:
   * Features
-  * Prerequisites
   * Installation
   * Configuration
   * Program Help Function
@@ -20,16 +19,6 @@
   * Move slave in a slave array to under another slave in the same slave array and remove the replication connection between the current master and new master.
   * Take a slave that is under a slave/master and move it to under the master that is hosting the slave/master.
 
-
-# Prerequisites:
-
-  * List of Linux packages that need to be installed on the server.
-    - git
-    - python-pip
-
-  * Local class/library dependencies within the program structure.
-    - python-lib
-    - mysql-lib
 
 # Installation:
 
