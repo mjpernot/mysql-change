@@ -28,6 +28,112 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_dir_chk
+        arg_require
+        arg_cond_req
+        arg_xor_dict
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.cmdline = None
+        self.args_array = dict()
+        self.opt_req = None
+        self.opt_req2 = True
+        self.dir_perms_chk = None
+        self.dir_perms_chk2 = True
+        self.opt_con_req = None
+        self.opt_con_req2 = True
+        self.opt_xor_val = None
+        self.opt_xor_val2 = True
+
+    def arg_dir_chk(self, dir_perms_chk):
+
+        """Method:  arg_dir_chk
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_dir_chk.
+
+        Arguments:
+
+        """
+
+        self.dir_perms_chk = dir_perms_chk
+
+        return self.dir_perms_chk2
+
+    def arg_require(self, opt_req):
+
+        """Method:  arg_require
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_require.
+
+        Arguments:
+
+        """
+
+        self.opt_req = opt_req
+
+        return self.opt_req2
+
+    def arg_cond_req(self, opt_con_req):
+
+        """Method:  arg_cond_req
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_cond_req.
+
+        Arguments:
+
+        """
+
+        self.opt_con_req = opt_con_req
+
+        return self.opt_con_req2
+
+    def arg_xor_dict(self, opt_xor_val):
+
+        """Method:  arg_xor_dict
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_xor_dict.
+
+        Arguments:
+
+        """
+
+        self.opt_xor_val = opt_xor_val
+
+        return self.opt_xor_val2
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class ProgramLock(object):
 
     """Class:  ProgramLock
@@ -65,14 +171,14 @@ class UnitTest(unittest.TestCase):
         setUp
         test_help_true
         test_help_false
-        test_arg_req_true
         test_arg_req_false
+        test_arg_req_true
         test_arg_xor_false
         test_arg_xor_true
         test_arg_cond_false
         test_arg_cond_true
-        test_arg_dir_true
         test_arg_dir_false
+        test_arg_dir_true
         test_run_program
         test_programlock_true
         test_programlock_false
@@ -90,12 +196,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
-        self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor"}
+        self.args = ArgParser()
+        self.args2 = ArgParser()
+        self.args.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
+        self.args2.args_array = {
+            "-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor"}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
 
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
     def test_help_true(self, mock_arg, mock_help):
 
         """Function:  test_help_true
@@ -106,15 +215,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        mock_arg.return_value = self.args
         mock_help.return_value = True
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_help_false(self, mock_arg, mock_help, mock_req):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_help_false(self, mock_arg, mock_help):
 
         """Function:  test_help_false
 
@@ -124,36 +232,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.opt_req2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = True
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_req_true(self, mock_arg, mock_help, mock_req):
-
-        """Function:  test_arg_req_true
-
-        Description:  Test arg_require if returns true.
-
-        Arguments:
-
-        """
-
-        mock_arg.return_value = self.args_array
-        mock_help.return_value = False
-        mock_req.return_value = True
-
-        self.assertFalse(mysql_rep_change.main())
-
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
-    @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_req_false(self, mock_arg, mock_help, mock_req, mock_xor):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_req_false(self, mock_arg, mock_help):
 
         """Function:  test_arg_req_false
 
@@ -163,18 +251,35 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.opt_req2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = False
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_xor_false(self, mock_arg, mock_help, mock_req, mock_xor):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_req_true(self, mock_arg, mock_help):
+
+        """Function:  test_arg_req_true
+
+        Description:  Test arg_require if returns true.
+
+        Arguments:
+
+        """
+
+        self.args.opt_xor_val2 = False
+
+        mock_arg.return_value = self.args
+        mock_help.return_value = False
+
+        self.assertFalse(mysql_rep_change.main())
+
+    @mock.patch("mysql_rep_change.gen_libs.help_func")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_xor_false(self, mock_arg, mock_help):
 
         """Function:  test_arg_xor_false
 
@@ -184,20 +289,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.opt_xor_val2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = False
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_cond_req")
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_xor_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                          mock_cond):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_xor_true(self, mock_arg, mock_help):
 
         """Function:  test_arg_xor_true
 
@@ -207,21 +308,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.opt_con_req2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = True
-        mock_cond.return_value = False
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_cond_req")
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_xor,
-                            mock_cond):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_cond_false(self, mock_arg, mock_help):
 
         """Function:  test_arg_cond_false
 
@@ -231,22 +327,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.opt_con_req2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = True
-        mock_cond.return_value = False
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_dir_chk_crt")
-    @mock.patch("mysql_rep_change.arg_parser.arg_cond_req")
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_cond_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                           mock_cond, mock_dir):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_cond_true(self, mock_arg, mock_help):
 
         """Function:  test_arg_cond_true
 
@@ -256,46 +346,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.return_value = self.args_array
+        self.args.dir_perms_chk2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = True
-        mock_cond.return_value = True
-        mock_dir.return_value = True
 
         self.assertFalse(mysql_rep_change.main())
 
-    @mock.patch("mysql_rep_change.arg_parser.arg_dir_chk_crt")
-    @mock.patch("mysql_rep_change.arg_parser.arg_cond_req")
-    @mock.patch("mysql_rep_change.arg_parser.arg_xor_dict")
-    @mock.patch("mysql_rep_change.arg_parser.arg_require")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser.arg_parse2")
-    def test_arg_dir_true(self, mock_arg, mock_help, mock_req, mock_xor,
-                          mock_cond, mock_dir):
-
-        """Function:  test_arg_dir_true
-
-        Description:  Test arg_dir_chk_crt if returns true.
-
-        Arguments:
-
-        """
-
-        mock_arg.return_value = self.args_array
-        mock_help.return_value = False
-        mock_req.return_value = False
-        mock_xor.return_value = True
-        mock_cond.return_value = True
-        mock_dir.return_value = True
-
-        self.assertFalse(mysql_rep_change.main())
-
-    @mock.patch("mysql_rep_change.run_program", mock.Mock(return_value=True))
-    @mock.patch("mysql_rep_change.gen_class.ProgramLock")
-    @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser")
-    def test_arg_dir_false(self, mock_arg, mock_help, mock_lock):
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_dir_false(self, mock_arg, mock_help):
 
         """Function:  test_arg_dir_false
 
@@ -305,13 +365,29 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.arg_parse2.return_value = self.args_array
+        self.args.dir_perms_chk2 = False
+
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_cond_req.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-        mock_arg.arg_file_chk.return_value = True
+
+        self.assertFalse(mysql_rep_change.main())
+
+    @mock.patch("mysql_rep_change.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_rep_change.gen_class.ProgramLock")
+    @mock.patch("mysql_rep_change.gen_libs.help_func")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
+    def test_arg_dir_true(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_arg_dir_true
+
+        Description:  Test arg_dir_chk_crt if returns true.
+
+        Arguments:
+
+        """
+
+        mock_arg.return_value = self.args
+        mock_help.return_value = False
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_rep_change.main())
@@ -319,7 +395,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.run_program", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.gen_class.ProgramLock")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
     def test_run_program(self, mock_arg, mock_help, mock_lock):
 
         """Function:  test_run_program
@@ -330,13 +406,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_cond_req.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-        mock_arg.arg_file_chk.return_value = True
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_rep_change.main())
@@ -344,7 +415,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.run_program", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.gen_class.ProgramLock")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
     def test_programlock_true(self, mock_arg, mock_help, mock_lock):
 
         """Function:  test_programlock_true
@@ -355,20 +426,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_cond_req.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-        mock_arg.arg_file_chk.return_value = True
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_rep_change.main())
 
     @mock.patch("mysql_rep_change.gen_class.ProgramLock")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
     def test_programlock_false(self, mock_arg, mock_help, mock_lock):
 
         """Function:  test_programlock_false
@@ -379,13 +445,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.return_value = self.args
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_cond_req.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-        mock_arg.arg_file_chk.return_value = True
         mock_lock.side_effect = \
             mysql_rep_change.gen_class.SingleInstanceException
 
@@ -395,7 +456,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_rep_change.run_program", mock.Mock(return_value=True))
     @mock.patch("mysql_rep_change.gen_class.ProgramLock")
     @mock.patch("mysql_rep_change.gen_libs.help_func")
-    @mock.patch("mysql_rep_change.arg_parser")
+    @mock.patch("mysql_rep_change.gen_class.ArgParser")
     def test_programlock_id(self, mock_arg, mock_help, mock_lock):
 
         """Function:  test_programlock_id
@@ -406,13 +467,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        mock_arg.arg_parse2.return_value = self.args_array2
+        mock_arg.return_value = self.args2
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_cond_req.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-        mock_arg.arg_file_chk.return_value = True
         mock_lock.return_value = self.proglock
 
         self.assertFalse(mysql_rep_change.main())
