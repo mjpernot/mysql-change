@@ -7,6 +7,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ## [3.2.0] - 2023-08-23
 - Upgraded python-lib to v2.10.1
 
+### Changed
+- main: Removed gen_libs.get_inst call.
+
 
 ## [3.1.2] - 2022-11-22
 - Updated to work in Python 3 too
