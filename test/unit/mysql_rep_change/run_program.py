@@ -28,6 +28,57 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_args_keys
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.cmdline = None
+        self.args_array = dict()
+
+    def get_args_keys(self):
+
+        """Method:  get_args_keys
+
+        Description:  Method stub holder for gen_class.ArgParser.get_args_keys.
+
+        Arguments:
+
+        """
+
+        return list(self.args_array.keys())
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class MasterRep(object):
 
     """Class:  MasterRep
@@ -118,9 +169,8 @@ def move_slave(master, slave, **kwargs):
 
     status = False
     msg = None
-    args_array = dict(kwargs.get("args"))
 
-    if master and slave and args_array:
+    if master and slave and kwargs.get("args"):
         status = False
 
     return status, msg
@@ -140,9 +190,8 @@ def move_slave_up(master, slave, **kwargs):
 
     status = True
     msg = "Error Message"
-    args_array = dict(kwargs.get("args"))
 
-    if master and slave and args_array:
+    if master and slave and kwargs.get("args"):
         status = True
 
     return status, msg
@@ -178,11 +227,15 @@ class UnitTest(unittest.TestCase):
         """
 
         self.err_msg = "Connection Error"
-        self.args_array = {"-m": "master", "-n": "slaves"}
-        self.args_array2 = {"-m": "master", "-n": "slaves", "-M": True}
-        self.args_array3 = {"-m": "master", "-n": "slaves", "-M": True,
-                            "-R": True}
-        self.args_array4 = {"-m": "master", "-n": "slaves", "-S": True}
+        self.args = ArgParser()
+        self.args2 = ArgParser()
+        self.args3 = ArgParser()
+        self.args4 = ArgParser()
+        self.args.args_array = {"-m": "master", "-n": "slaves"}
+        self.args2.args_array = {"-m": "master", "-n": "slaves", "-M": True}
+        self.args3.args_array = {
+            "-m": "master", "-n": "slaves", "-M": True, "-R": True}
+        self.args4.args_array = {"-m": "master", "-n": "slaves", "-S": True}
         self.func_names = {"-M": move_slave, "-R": move_slave,
                            "-S": move_slave_up}
         self.master = MasterRep()
@@ -217,8 +270,8 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master2, self.slave_list2)
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_names))
+            self.assertFalse(
+                mysql_rep_change.run_program(self.args2, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -236,8 +289,8 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list3)
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_names))
+            self.assertFalse(
+                mysql_rep_change.run_program(self.args2, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -255,8 +308,8 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list2)
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_names))
+            self.assertFalse(
+                mysql_rep_change.run_program(self.args2, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -274,8 +327,8 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master2, self.slave_list)
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                          self.func_names))
+            self.assertFalse(
+                mysql_rep_change.run_program(self.args2, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -293,8 +346,8 @@ class UnitTest(unittest.TestCase):
         mock_create.return_value = (self.master, self.slave_list)
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_rep_change.run_program(self.args_array4,
-                                                          self.func_names))
+            self.assertFalse(
+                mysql_rep_change.run_program(self.args4, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -311,8 +364,8 @@ class UnitTest(unittest.TestCase):
 
         mock_create.return_value = (self.master, self.slave_list)
 
-        self.assertFalse(mysql_rep_change.run_program(self.args_array3,
-                                                      self.func_names))
+        self.assertFalse(
+            mysql_rep_change.run_program(self.args3, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -329,8 +382,8 @@ class UnitTest(unittest.TestCase):
 
         mock_create.return_value = (self.master, self.slave_list)
 
-        self.assertFalse(mysql_rep_change.run_program(self.args_array2,
-                                                      self.func_names))
+        self.assertFalse(
+            mysql_rep_change.run_program(self.args2, self.func_names))
 
     @mock.patch("mysql_rep_change.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
@@ -347,8 +400,8 @@ class UnitTest(unittest.TestCase):
 
         mock_create.return_value = (self.master, self.slave_list)
 
-        self.assertFalse(mysql_rep_change.run_program(self.args_array,
-                                                      self.func_names))
+        self.assertFalse(
+            mysql_rep_change.run_program(self.args, self.func_names))
 
 
 if __name__ == "__main__":

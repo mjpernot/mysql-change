@@ -164,7 +164,6 @@ import sys
 
 # Local
 try:
-    from .lib import arg_parser
     from .lib import gen_libs
     from .lib import gen_class
     from .lib import machine
@@ -173,7 +172,6 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.arg_parser as arg_parser
     import lib.gen_libs as gen_libs
     import lib.gen_class as gen_class
     import lib.machine as machine
@@ -206,7 +204,7 @@ def is_slv_up(slv):
         any errors to report.
 
     Arguments:
-        (input) slv -> Class instance of slave.
+        (input) slv -> Class instance of slave
 
     """
 
@@ -226,12 +224,12 @@ def crt_slv_mst(slaves, **kwargs):
         slave array.  Does ensure the slave is not in read-only mode.
 
     Arguments:
-        (input) slaves -> Slave instance array.
+        (input) slaves -> Slave instance array
         (input) **kwargs:
-            new_mst -> Name of slave to be the new master.
-        (output) new_master -> Class instance of new master.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
+            new_mst -> Name of slave to be the new master
+        (output) new_master -> Class instance of new master
+        (output) err_flag -> True|False - if an error has occurred
+        (output) err_msg -> Error message
 
     """
 
@@ -281,14 +279,14 @@ def mv_slv_to_new_mst(master, slaves, new_master, slave_move, **kwargs):
         Change Master To command.
 
     Arguments:
-        (input) master -> Master class instance.
-        (input) slaves -> Slave instance array.
-        (input) new_master -> Class instance of new master.
-        (input) slave_move -> Class instance of slave to be moved.
+        (input) master -> Master class instance
+        (input) slaves -> Slave instance array
+        (input) new_master -> Class instance of new master
+        (input) slave_move -> Class instance of slave to be moved
         (input) **kwargs:
-            new_mst -> Name of slave to be the new master.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
+            new_mst -> Name of slave to be the new master
+        (output) err_flag -> True|False - if an error has occurred
+        (output) err_msg -> Error message
 
     """
 
@@ -325,21 +323,21 @@ def move_slave(master, slaves, **kwargs):
         drop the rep connection between the old master and new master.
 
     Arguments:
-        (input) master -> Master class instance.
-        (input) slaves -> Slave instance array.
+        (input) master -> Master class instance
+        (input) slaves -> Slave instance array
         (input) **kwargs:
-            new_mst -> Name of slave to be the new master.
-            slv_mv -> Name of slave to be moved to new master.
-            args -> Array of command line options and values.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
+            new_mst -> Name of slave to be the new master
+            slv_mv -> Name of slave to be moved to new master
+            args -> ArgParser class instance
+        (output) err_flag -> True|False - if an error has occurred
+        (output) err_msg -> Error message
 
     """
 
-    args_array = dict(kwargs.get("args"))
+    args = kwargs.get("args")
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
-                                                         kwargs.get("slv_mv"))
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(
+        slaves, kwargs.get("slv_mv"))
 
     if not err_flag:
         new_master, err_flag, err_msg = crt_slv_mst(slaves, **kwargs)
@@ -351,15 +349,15 @@ def move_slave(master, slaves, **kwargs):
             if not err_flag:
                 is_slv_up(slave_move)
 
-                if "-R" in args_array:
-                    slv_mst = mysql_libs.find_name(slaves,
-                                                   kwargs.get("new_mst"))
+                if args.arg_exist("-R"):
+                    slv_mst = mysql_libs.find_name(
+                        slaves, kwargs.get("new_mst"))
                     mysql_libs.chg_slv_state([slv_mst], "stop")
                     mysql_libs.reset_slave(slv_mst)
 
                 else:
-                    is_slv_up(mysql_libs.find_name(slaves,
-                                                   kwargs.get("new_mst")))
+                    is_slv_up(mysql_libs.find_name(
+                        slaves, kwargs.get("new_mst")))
 
             mysql_libs.disconnect(new_master)
 
@@ -376,26 +374,26 @@ def move_slave_up(master, slaves, **kwargs):
         slave/master to the new master.
 
     Arguments:
-        (input) master -> Master class instance.
-        (input) slaves -> Slave instance array.
+        (input) master -> Master class instance
+        (input) slaves -> Slave instance array
         (input) **kwargs:
-            new_mst -> Name of slave to be the new master.
-            slv_mv -> Name of slave to be moved to new master.
-            args -> Array of command line options and values.
-        (output) err_flag -> True|False - if an error has occurred.
-        (output) err_msg -> Error message.
+            new_mst -> Name of slave to be the new master
+            slv_mv -> Name of slave to be moved to new master
+            args -> ArgParser class instance
+        (output) err_flag -> True|False - if an error has occurred
+        (output) err_msg -> Error message
 
     """
 
-    args_array = dict(kwargs.get("args"))
+    args = kwargs.get("args")
     slaves = list(slaves)
-    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(slaves,
-                                                         kwargs.get("slv_mv"))
+    slave_move, err_flag, err_msg = mysql_libs.fetch_slv(
+        slaves, kwargs.get("slv_mv"))
 
     if err_flag:
         return err_flag, err_msg
 
-    cfg = gen_libs.load_module(kwargs.get("new_mst"), args_array["-d"])
+    cfg = gen_libs.load_module(kwargs.get("new_mst"), args.get_val("-d"))
     new_master = mysql_class.MasterRep(
         cfg.name, cfg.sid, cfg.user, cfg.japd,
         os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
@@ -442,7 +440,7 @@ def move_slave_up(master, slaves, **kwargs):
     return err_flag, err_msg
 
 
-def create_instances(args_array, **kwargs):
+def create_instances(args, **kwargs):
 
     """Function:  create_instances
 
@@ -450,16 +448,15 @@ def create_instances(args_array, **kwargs):
         instances for slaves.  Slave instances will be appended to an array.
 
     Arguments:
-        (input) args_array -> Array of command line options and values.
+        (input) args -> ArgParser class instance
         (input) kwargs:
-            slv_key -> Dictionary of keys and data types.
-        (output) master -> Master instance.
-        (output) slave -> Slave instance list.
+            slv_key -> Dictionary of keys and data types
+        (output) master -> Master instance
+        (output) slave -> Slave instance list
 
     """
 
-    args_array = dict(args_array)
-    cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+    cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
     master = mysql_class.MasterRep(
         cfg.name, cfg.sid, cfg.user, cfg.japd,
         os_type=getattr(machine, cfg.serv_os)(), host=cfg.host, port=cfg.port,
@@ -468,40 +465,39 @@ def create_instances(args_array, **kwargs):
         rep_user=cfg.rep_user, rep_japd=cfg.rep_japd)
     master.connect(silent=True)
     slaves = []
-    slv_array = gen_libs.create_cfg_array(args_array["-s"],
-                                          cfg_path=args_array["-d"])
+    slv_array = gen_libs.create_cfg_array(
+        args.get_val("-s"), cfg_path=args.get_val("-d"))
     slv_array = gen_libs.transpose_dict(slv_array, kwargs.get("slv_key", {}))
     slaves = mysql_libs.create_slv_array(slv_array)
 
     return master, slaves
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args, func_dict, **kwargs):
 
     """Function:  run_program
 
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Array of command line options and values.
-        (input) func_dict -> Dictionary list of functions and options.
+        (input) args -> ArgParser class instance
+        (input) func_dict -> Dictionary list of functions and options
         (input) kwargs:
-            slv_key -> Dictionary of keys and data types.
+            slv_key -> Dictionary of keys and data types
 
     """
 
-    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    master, slaves = create_instances(args_array, **kwargs)
+    master, slaves = create_instances(args, **kwargs)
 
     if slaves and not master.conn_msg \
        and not [False for item in slaves if item.conn_msg]:
 
-        # Intersect args_array and func_dict to call function.
-        for item in set(args_array.keys()) & set(func_dict.keys()):
+        # Intersect args and func_dict to call function
+        for item in set(args.get_args_keys()) & set(func_dict.keys()):
             err_flag, err_msg = func_dict[item](
-                master, slaves, new_mst=args_array["-m"],
-                slv_mv=args_array["-n"], args=args_array)
+                master, slaves, new_mst=args.get_val("-m"),
+                slv_mv=args.get_val("-n"), args=args)
 
             if err_flag:
                 print(err_msg)
@@ -530,24 +526,23 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_con_req_list -> contains the options that require other options.
-        opt_req_list -> contains the options that are required for the program.
-        opt_val_list -> contains options which require values.
-        opt_xor_dict -> contains dict with key that is xor with it's values.
-        slv_key -> contains dict with keys to be converted to data types.
+        dir_perms_chk -> contains directories and their octal permissions
+        func_dict -> dictionary list for the function calls or other options
+        opt_con_req_list -> contains the options that require other options
+        opt_req_list -> contains the options that are required for the program
+        opt_val_list -> contains options which require values
+        opt_xor_dict -> contains dict with key that is xor with it's values
+        slv_key -> contains dict with keys to be converted to data types
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> Arguments from the command line
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
-    dir_chk_list = ["-d"]
+    dir_perms_chk = {"-d": 5}
     func_dict = {"-M": move_slave, "-R": move_slave, "-S": move_slave_up}
-    opt_con_req_list = {"-M": ["-m", "-n"], "-R": ["-m", "-n"],
-                        "-S": ["-m", "-n"]}
+    opt_con_req_list = {
+        "-M": ["-m", "-n"], "-R": ["-m", "-n"], "-S": ["-m", "-n"]}
     opt_req_list = ["-c", "-d", "-s"]
     opt_val_list = ["-c", "-d", "-m", "-n", "-s", "-y"]
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
@@ -558,23 +553,23 @@ def main():
                "ssl_verify_id": "bool", "ssl_verify_cert": "bool"}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list)
+    args = gen_class.ArgParser(sys.argv, opt_val=opt_val_list, do_parse=True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list):
+    if not gen_libs.help_func(args, __version__, help_message)  \
+       and args.arg_require(opt_req=opt_req_list)               \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)          \
+       and args.arg_cond_req(opt_con_req=opt_con_req_list)      \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk):
 
         try:
-            proglock = gen_class.ProgramLock(cmdline.argv,
-                                             args_array.get("-y", ""))
-            run_program(args_array, func_dict, slv_key=slv_key)
+            proglock = gen_class.ProgramLock(
+                sys.argv, args.get_val("-y", def_val=""))
+            run_program(args, func_dict, slv_key=slv_key)
             del proglock
 
         except gen_class.SingleInstanceException:
             print("WARNING:  lock in place for mysql_rep_change with id of: %s"
-                  % (args_array.get("-y", "")))
+                  % (args.get_val("-y", def_val="")))
 
 
 if __name__ == "__main__":
