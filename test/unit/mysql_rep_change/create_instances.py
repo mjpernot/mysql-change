@@ -27,6 +27,44 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.cmdline = None
+        self.args_array = dict()
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class MasterRep(object):
 
     """Class:  MasterRep
@@ -134,7 +172,9 @@ class UnitTest(unittest.TestCase):
 
         self.cfg = Cfg()
         self.master = MasterRep()
-        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-s": "slave"}
+        self.args = ArgParser()
+        self.args.args_array = {
+            "-c": "mysql_cfg", "-d": "config", "-s": "slave"}
         self.name = "Server_Name"
 
     @mock.patch("mysql_rep_change.mysql_libs.create_slv_array",
@@ -158,7 +198,7 @@ class UnitTest(unittest.TestCase):
         mock_cfg.return_value = self.cfg
         mock_trans.return_value = []
 
-        master, slaves = mysql_rep_change.create_instances(self.args_array)
+        master, slaves = mysql_rep_change.create_instances(self.args)
 
         self.assertEqual((master.name, slaves), (self.name, "SlaveArray"))
 

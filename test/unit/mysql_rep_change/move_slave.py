@@ -27,6 +27,44 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.cmdline = None
+        self.args_array = dict()
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+
 class MasterRep(object):
 
     """Class:  MasterRep
@@ -142,8 +180,10 @@ class UnitTest(unittest.TestCase):
         self.err_msg = "Error: Fetch Failed"
         self.err_msg2 = "Error: Create Slave Failed"
         self.err_msg3 = "Error: Move of Slave to Master Failed"
-        self.args = {"-R": True}
-        self.args2 = {}
+        self.args = ArgParser()
+        self.args2 = ArgParser()
+        self.args.args_array = {"-R": True}
+        self.args2.args_array = {}
         self.new_mst = "NewMaster"
 
     @mock.patch("mysql_rep_change.is_slv_up", mock.Mock(return_value=True))
