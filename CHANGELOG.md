@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.2.1] - 2024-02-29
+- Updated to work in Red Hat 8
+- Updated python-lib to v3.0.3
+- Updated mysql-lib to v5.3.4
+
+### Changed
+- Set simplejson to 3.12.0 for Python 3.
+- Set chardet to 3.0.4 for Python 2.
+- Documentation updates.
+
+
 ## [3.2.0] - 2023-08-23
 - Upgraded python-lib to v2.10.1
 - Replaced the arg_parser code with gen_class.ArgParser code.
