@@ -19,7 +19,7 @@ serv_os = "Linux"
 # MySQL database port (default is 3306)
 port = 3306
 # MySQL configuration settings
-cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+cfg_file = "/etc/my.cnf"
 # SSL Configuration settings
 # If not set will connect to MySQL without using SSL connections.
 # File containing the SSL certificate authority.

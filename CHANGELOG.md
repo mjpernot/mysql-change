@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.2.2] - 2024-09-10
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE:  Changed cfg_file default value.
+- main: Removed parsing from gen_class.ArgParser call and called arg_parse2 as part of "if" statement.
+
+
 ## [3.2.1] - 2024-02-29
 - Updated to work in Red Hat 8
 - Updated python-lib to v3.0.3
