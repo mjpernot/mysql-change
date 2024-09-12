@@ -1,6 +1,5 @@
 chardet==3.0.4
 distro==1.6.0
-email==4.0.3
 mysql-connector-python==8.0.22
 protobuf==3.19.1
-simplejson==2.0.9
+simplejson==3.13.2
