@@ -1,5 +1,5 @@
-chardet==3.0.4
-distro==1.6.0
-mysql-connector-python==8.0.22
-protobuf==3.19.1
+chardet==4.0.0
+distro==1.9.0
+protobuf==3.19.6
+mysql-connector-python==8.0.28
 simplejson==3.13.2

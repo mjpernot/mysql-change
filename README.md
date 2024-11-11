@@ -180,7 +180,7 @@ Install the project using the procedures in the Installation section.
 
 ```
 cd {Python_Project}/mysql-change
-test/unit/mysql_rep_change/unit_test_run.sh
+test/unit/mysql_rep_change/unit_test_run3.sh
 ```
 
 ### Code Coverage:
