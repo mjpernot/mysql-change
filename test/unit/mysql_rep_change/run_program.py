@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import lib.gen_libs as gen_libs
-import mysql_rep_change
-import version
+import mysql_rep_change                         # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ArgParser(object):
+class ArgParser():
 
     """Class:  ArgParser
 
@@ -52,7 +52,7 @@ class ArgParser(object):
         """
 
         self.cmdline = None
-        self.args_array = dict()
+        self.args_array = {}
 
     def get_args_keys(self):
 
@@ -79,7 +79,7 @@ class ArgParser(object):
         return self.args_array.get(skey, def_val)
 
 
-class MasterRep(object):
+class MasterRep():                                      # pylint:disable=R0903
 
     """Class:  MasterRep
 
@@ -87,7 +87,6 @@ class MasterRep(object):
 
     Methods:
         __init__
-        connect
 
     """
 
@@ -117,7 +116,7 @@ class MasterRep(object):
         self.conn_msg = None
 
 
-class SlaveRep(object):
+class SlaveRep():                                       # pylint:disable=R0903
 
     """Class:  SlaveRep
 
@@ -125,7 +124,6 @@ class SlaveRep(object):
 
     Methods:
         __init__
-        connect
 
     """
 

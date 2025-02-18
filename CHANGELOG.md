@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.0] - 2025-02-18
+Breaking Changes
+
+- Removed support for Python 2.7.
+- Updated mysql-lib v5.4.0
+- Updated python-lib v4.0.0
+
+### Changed
+- Converted strings to f-strings.
+- Documentation changes.
+
+### Deprecated
+- Support for MySQL 5.6/5.7
+
+
 ## [3.2.5] - 2024-11-19
 - Updated python-lib to v3.0.8
 - Updated mysql-lib to v5.3.9
