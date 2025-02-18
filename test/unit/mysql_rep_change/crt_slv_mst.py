@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_rep_change
-import lib.gen_libs as gen_libs
-import version
+import mysql_rep_change                         # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class MasterRep(object):
+class MasterRep():                                      # pylint:disable=R0903
 
     """Class:  MasterRep
 
@@ -83,7 +83,7 @@ class MasterRep(object):
         return status
 
 
-class SlaveRep(object):
+class SlaveRep():                                       # pylint:disable=R0903
 
     """Class:  SlaveRep
 

@@ -71,7 +71,7 @@
             host = "HOST_IP"
             name = "HOST_NAME"
             sid = SERVER_ID
-            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            extra_def_file = "PATH/config/mysql.cfg"
             serv_os = "Linux"
             port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
@@ -156,8 +156,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
-from __future__ import absolute_import
 
 # Standard
 import sys
@@ -172,11 +170,11 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.gen_libs as gen_libs
-    import lib.gen_class as gen_class
-    import lib.machine as machine
-    import mysql_lib.mysql_libs as mysql_libs
-    import mysql_lib.mysql_class as mysql_class
+    import lib.gen_libs as gen_libs                     # pylint:disable=R0402
+    import lib.gen_class as gen_class                   # pylint:disable=R0402
+    import lib.machine as machine                       # pylint:disable=R0402
+    import mysql_lib.mysql_libs as mysql_libs           # pylint:disable=R0402
+    import mysql_lib.mysql_class as mysql_class         # pylint:disable=R0402
     import version
 
 __version__ = version.__version__
@@ -209,11 +207,11 @@ def is_slv_up(slv):
     """
 
     if not slv.is_slv_running():
-        print("Error:  Slave on {0} is not running.".format(slv.name))
+        print(f"Error:  Slave on {slv.name} is not running.")
 
         if slv.is_slv_error():
-            print("IO Error:  {0}:  {1}".format(slv.io_err, slv.io_msg))
-            print("SQL Error:  {0}:  {1}".format(slv.sql_err, slv.sql_msg))
+            print(f"IO Error:  {slv.io_err}:  {slv.io_msg}")
+            print(f"SQL Error:  {slv.sql_err}:  {slv.sql_msg}")
 
 
 def crt_slv_mst(slaves, **kwargs):
@@ -243,8 +241,9 @@ def crt_slv_mst(slaves, **kwargs):
 
         if gen_libs.is_true(slv.read_only):
             err_flag = True
-            err_msg = "Error:  New master %s is set to read-only mode." \
-                      % (kwargs.get("new_mst"))
+            err_msg = \
+                f'Error:  New master {kwargs.get("new_mst")} is set to' \
+                f' read-only mode.'
 
         # Assume slave is ready to be new master.
         else:
@@ -260,12 +259,13 @@ def crt_slv_mst(slaves, **kwargs):
                 err_flag = True
                 err_msg = "Detected problem in new master connection"
                 print("Error:  Connection problem for new master.")
-                print("\tNew Master:  %s" % (new_master.conn_msg))
+                print(f"\tNew Master:  {new_master.conn_msg}")
 
     else:
         err_flag = True
-        err_msg = "Error: Slave(new master) %s was not found in slave array." \
-                  % (kwargs.get("new_mst"))
+        err_msg = \
+            f'Error: Slave(new master) {kwargs.get("new_mst")} was not found' \
+            f' in slave array.'
 
     return new_master, err_flag, err_msg
 
@@ -413,8 +413,8 @@ def move_slave_up(master, slaves, **kwargs):
         err_msg = "Detected problem in one of the connections"
 
         print("Error:  Connection problem for new master/slave master.")
-        print("\tNew Master:  %s" % (new_master.conn_msg))
-        print("\tSlave Master:  %s" % (slv_master.conn_msg))
+        print(f"\tNew Master:  {new_master.conn_msg}")
+        print(f"\tSlave Master:  {slv_master.conn_msg}")
 
         if new_master.conn:
             mysql_libs.disconnect(new_master)
@@ -507,13 +507,13 @@ def run_program(args, func_dict, **kwargs):
 
     else:
         print("Error:  Connection problem for master/slaves.")
-        print("\tMaster:  %s" % (master.conn_msg))
+        print(f"\tMaster:  {master.conn_msg}")
 
         if master.conn:
             mysql_libs.disconnect(master)
 
         for slv in slaves:
-            print("\tSlave:  %s" % (slv.conn_msg))
+            print(f"\tSlave:  {slv.conn_msg}")
             if slv.conn:
                 mysql_libs.disconnect(slv)
 
@@ -546,11 +546,12 @@ def main():
     opt_req_list = ["-c", "-d", "-s"]
     opt_val_list = ["-c", "-d", "-m", "-n", "-s", "-y"]
     opt_xor_dict = {"-M": ["-R", "-S"], "-R": ["-M", "-S"], "-S": ["-M", "-R"]}
-    slv_key = {"sid": "int", "port": "int", "cfg_file": "None",
-               "ssl_client_ca": "None", "ssl_ca_path": "None",
-               "ssl_client_key": "None", "ssl_client_cert": "None",
-               "ssl_client_flag": "int", "ssl_disabled": "bool",
-               "ssl_verify_id": "bool", "ssl_verify_cert": "bool"}
+    slv_key = {
+        "sid": "int", "port": "int", "cfg_file": "None",
+        "ssl_client_ca": "None", "ssl_ca_path": "None",
+        "ssl_client_key": "None", "ssl_client_cert": "None",
+        "ssl_client_flag": "int", "ssl_disabled": "bool",
+        "ssl_verify_id": "bool", "ssl_verify_cert": "bool"}
 
     # Process argument list from command line.
     args = gen_class.ArgParser(sys.argv, opt_val=opt_val_list)
@@ -569,8 +570,8 @@ def main():
             del proglock
 
         except gen_class.SingleInstanceException:
-            print("WARNING:  lock in place for mysql_rep_change with id of: %s"
-                  % (args.get_val("-y", def_val="")))
+            print(f'WARNING:  lock in place for mysql_rep_change with id of:'
+                  f' {args.get_val("-y", def_val="")}')
 
 
 if __name__ == "__main__":
