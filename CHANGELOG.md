@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.1] - 2025-05-30
+- Updated python-lib to v4.0.1
+- Updated mysql-lib to v5.5.1
+- Removed support for MySQL 5.6/5.7
+
+### Changed
+- Documentation changes.
+
+
 ## [4.0.0] - 2025-02-18
 Breaking Changes
 
