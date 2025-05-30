@@ -84,8 +84,8 @@ Create MySQL configuration file and make the appropriate change to the environme
 
 ```
 cp config/mysql_cfg.py.TEMPLATE config/mysql_cfg.py
-vim config/mysql_cfg.py
 chmod 600 config/mysql_cfg.py
+vim config/mysql_cfg.py
 ```
 
 Create MySQL definition file and make the appropriate change to the environment.
@@ -96,8 +96,8 @@ Create MySQL definition file and make the appropriate change to the environment.
 
 ```
 cp config/mysql.cfg.TEMPLATE config/mysql.cfg
-vim config/mysql.cfg
 chmod 600 config/mysql.cfg
+vim config/mysql.cfg
 ```
 
 Create a MySQL slave configuration file and make the appropriate change to the environment.
@@ -134,8 +134,8 @@ Create a MySQL slave configuration file and make the appropriate change to the e
 
 ```
 cp config/slave.txt.TEMPLATE config/slave.txt
-vim config/slave.txt
 chmod 600 config/slave.txt
+vim config/slave.txt
 ```
 
 
